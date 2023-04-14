@@ -31,7 +31,7 @@ export function HomePage (){
 
   return(
 
-    <Card style={{ width: "100vw", height:"100vh" }}>
+    <Card style={{ width: "fit-content", height:"fit-content" }}>
       <div style={{ display: 'flex', flexDirection:'row' }}>
         <Sidebar></Sidebar>
         <div style={{ margin:"20px", paddingLeft:"50px"  }}>
@@ -93,16 +93,54 @@ export function HomePage (){
             </Paragraph>
           </Card>
         </Col>
+        <Card>
+        <Title level={2} style={{ marginTop: '50px' }}>Recommended Blogs</Title>
+      <Row gutter={[32, 32]} justify="center" align="middle">
+        <Col xs={24} sm={12} lg={8}>
+          <Card hoverable cover={<img alt="blog1" src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGJsb2d8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80" style={{ height: '200px', objectFit: 'cover' }} />}>
+            <Title level={3}>FitnessBlender</Title>
+            <Paragraph>
+              Free full-length workout videos for all fitness levels. HASfit stands for Heart And Soul fitness because we believe everyone deserves to be fit.
+            </Paragraph>
+            <Button type="primary">Visit Blog</Button>
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={8}>
+          <Card hoverable cover={<img alt="blog2" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDpZq_YnAaA3l1odEUpn9ULiQKrbtHxRrggg&usqp=CAU" style={{ height: '200px', objectFit: 'cover' }} />}>
+            <Title level={3}>Tone It Up</Title>
+            <Paragraph>
+              Daily workout videos to tone every inch of your body. At Tone It Up we believe in whole body wellness.
+            </Paragraph>
+            <Button type="primary">Visit Blog</Button>
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={8}>
+          <Card hoverable cover={<img alt="blog3" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyU6JzzEtAKQZTzTylT_Mxx80vVnmJw-z-mw&usqp=CAU" style={{ height: '200px', objectFit: 'cover' }} />}>
+            <Title level={3}>Nerd Fitness</Title>
+            <Paragraph>
+              Helping you lose weight, get stronger, live better. We help desk jockeys, nerds, and average Joes level up their lives.
+            </Paragraph>
+            <Button type="primary">Visit Blog</Button>
+          </Card>
+        </Col>
+      </Row>
+
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <Button type="primary" size="large">View More</Button>
+      </div>
+        </Card>
         <Col span={24}>
           <div style={{ textAlign: 'center', marginTop: '50px' }}>
             <Button type="primary" size="large">Get Started</Button>
           </div>
         </Col>
-          </Row>
-        </Content>
-        </div>
-      </div>
+        </Row>
 
-   </Card>
-);
-} 
+      
+
+      </Content>
+      </div>
+      </div>
+      </Card>
+      );
+    }

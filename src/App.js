@@ -33,7 +33,7 @@ export default function App (){
     }}
   >
 
-    <Card style={{ width: "100vw", height:"100vh" }}>
+    <Card style={{  width: "fit-content", height:"fit-content" }}>
     <NavBar theme={{ isDarkMode, handleClick }}></NavBar>
    </Card>
    
