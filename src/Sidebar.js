@@ -29,6 +29,9 @@ export function Sidebar()
                     <Menu.Item key="5" icon={<MailOutlined />}>
                     <Feedback></Feedback>
                     </Menu.Item>
+                    <Menu.Item key="6" >
+                    <Review/>
+                    </Menu.Item>
                 </Menu>
             </Layout.Sider>
         </div>
