@@ -3,6 +3,11 @@ import { Layout, Typography, Row, Col, Card } from 'antd';
 import { NavBar } from './NavBar.js'
 import React from 'react';
 import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AboutUs } from './AboutUs';
+import { HomePage } from './HomePage';
+import { SleepTracking } from './SleepTracking';
+import { SuggestedBlogs } from './SuggestedBlogs';
 
 const darkOrLight= false;
 
@@ -38,6 +43,7 @@ export default function App (){
    </Card>
    
   </ConfigProvider>
+  
 );
 } 
 

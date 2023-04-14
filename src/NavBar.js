@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { AboutUs } from './AboutUs';
 import { HomePage } from './HomePage.js'
 import { SleepTracking } from './SleepTracking';
+import { SuggestedBlogs } from './SuggestedBlogs';
+import WaterTracking from './WaterTracking';
 
 export function NavBar(props) {
   
@@ -29,8 +31,9 @@ export function NavBar(props) {
         </Menu.Item>
       </Menu>
       <Routes>
+        <Route path ="/water-tracking" element={<WaterTracking/>}/>
+        <Route path="/view-blogs" element={<SuggestedBlogs />}/>
         <Route path="/sleep-tracking" element={<SleepTracking />}>
-          
         </Route>
         <Route path="/about"  element = {<AboutUs/>}>
         </Route>

@@ -19,6 +19,13 @@ export function HomePage (){
   const handleAnalyzeDataClick = () => {
     navigate('/sleep-tracking'); // Navigate to the SleepTracking page when the card is clicked
   };
+  const handleViewMoreBlogs = () => {
+    navigate('/view-blogs'); 
+  };
+  
+  const handleWaterTrackingClick=()=>{
+    navigate('/water-tracking'); 
+  }
   const handleClick = () => {
    setIsDarkMode((previousValue) => !previousValue);
   };
@@ -76,7 +83,7 @@ export function HomePage (){
             </Card>
           </Col>
           <Col xs={24} sm={12} lg={8}>
-          <Card hoverable>
+          <Card hoverable onClick={handleWaterTrackingClick}>
           <i class="fas fa-tint" style={{ fontSize: '64px', color: '#1890ff' }}  />
             <Title level={3}>Water tracking</Title>
             <Paragraph>
@@ -97,7 +104,7 @@ export function HomePage (){
         <Title level={2} style={{ marginTop: '50px' }}>Recommended Blogs</Title>
       <Row gutter={[32, 32]} justify="center" align="middle">
         <Col xs={24} sm={12} lg={8}>
-          <Card hoverable cover={<img alt="blog1" src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGJsb2d8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80" style={{ height: '200px', objectFit: 'cover' }} />}>
+          <Card hoverable cover={<img alt="blog1" src="https://img.freepik.com/free-vector/holistic-medicine-abstract-concept-vector-illustration-alternative-natural-medicine-holistic-mental-therapy-whole-body-treatment-health-practice-disease-integrative-doctor-abstract-metaphor_335657-1696.jpg?w=2000" style={{ height: '200px', objectFit: 'cover' }} />}>
             <Title level={3}>FitnessBlender</Title>
             <Paragraph>
               Free full-length workout videos for all fitness levels. HASfit stands for Heart And Soul fitness because we believe everyone deserves to be fit.
@@ -106,7 +113,7 @@ export function HomePage (){
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={8}>
-          <Card hoverable cover={<img alt="blog2" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDpZq_YnAaA3l1odEUpn9ULiQKrbtHxRrggg&usqp=CAU" style={{ height: '200px', objectFit: 'cover' }} />}>
+          <Card hoverable cover={<img alt="blog2" src="https://i.pinimg.com/736x/17/1d/3a/171d3af76098f4844094b8951d96c047.jpg" style={{ height: '200px', objectFit: 'cover' }} />}>
             <Title level={3}>Tone It Up</Title>
             <Paragraph>
               Daily workout videos to tone every inch of your body. At Tone It Up we believe in whole body wellness.
@@ -115,7 +122,7 @@ export function HomePage (){
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={8}>
-          <Card hoverable cover={<img alt="blog3" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyU6JzzEtAKQZTzTylT_Mxx80vVnmJw-z-mw&usqp=CAU" style={{ height: '200px', objectFit: 'cover' }} />}>
+          <Card hoverable cover={<img alt="blog3" src="https://i.pinimg.com/564x/0c/c7/67/0cc767db28c09cece26017ec036d68e5.jpg" style={{ height: '200px', objectFit: 'cover' }} />}>
             <Title level={3}>Nerd Fitness</Title>
             <Paragraph>
               Helping you lose weight, get stronger, live better. We help desk jockeys, nerds, and average Joes level up their lives.
@@ -126,7 +133,7 @@ export function HomePage (){
       </Row>
 
       <div style={{ textAlign: 'center', marginTop: '50px' }}>
-        <Button type="primary" size="large">View More</Button>
+        <Button type="primary" size="large" onClick={handleViewMoreBlogs}>View More</Button>
       </div>
         </Card>
         <Col span={24}>

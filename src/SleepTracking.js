@@ -9,11 +9,8 @@ export function SleepTracking() {
     // Add logic to submit sleep data to server or store locally
   };
 
-  const handleReset = () => {
-    // Add logic to reset form fields
-  };
-
   return (
+    <div style={{width :"100vw" , height:"100vh" }}>
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Title level={3}>Sleep Tracking</Title>
@@ -53,5 +50,6 @@ export function SleepTracking() {
         </Card>
     </Col>
     </Row>
+    </div>
     )
 }

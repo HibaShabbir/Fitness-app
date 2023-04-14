@@ -1,59 +1,66 @@
-import React from 'react';
-import { Layout, Row, Col, Input, Button, Select, Card, Pagination } from 'antd';
-import './App.css';
+import { useState } from 'react';
+import axios from 'axios';
+import { Card, List, Input, Button } from 'antd';
 
-const { Header, Content } = Layout;
-const { Option } = Select;
-const { Meta } = Card;
+const newsSearchUrl = 'https://newsapi.org/v2/everything';
+const apiKey = '745fb3e8384f43ed8a55c7b9c40c844b';
+const perPage = 9; // Number of articles to show per page
 
-function App() {
+export function SuggestedBlogs() {
+  const [articles, setArticles] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearchClick = async (searchQuery= 'healthy') => {
+    try {
+      const response = await axios.get(newsSearchUrl, {
+        params: {
+          q: searchQuery,
+          language: 'en',
+          page: currentPage,
+          pageSize: perPage,
+          sortBy: 'relevancy',
+          apiKey: apiKey
+        }
+      });
+      setArticles(response.data.articles);
+    } catch (error) {
+      console.error(error);
+      setArticles([]);
+    }
+  };
+
   return (
-    <Layout className="layout">
-      <Header>
-        <div className="logo">Fitness Blog Search</div>
-      </Header>
-      <Content className="content">
-        <Row justify="center">
-          <Col xs={24} md={12} lg={8}>
-            <Input placeholder="Search for blogs" />
-          </Col>
-          <Col xs={24} md={12} lg={8}>
-            <Select placeholder="Select a category" style={{ width: '100%' }}>
-              <Option value="fitness">Fitness</Option>
-              <Option value="nutrition">Nutrition</Option>
-              <Option value="mindfulness">Mindfulness</Option>
-            </Select>
-          </Col>
-          <Col xs={24} md={12} lg={4}>
-            <Button type="primary" style={{ width: '100%' }}>Search</Button>
-          </Col>
-        </Row>
-        <Row justify="center">
-          <Col xs={24} md={20} lg={16}>
-            <div className="blog-list">
-              <Card
-                hoverable
-                cover={<img alt="blog post" src="https://picsum.photos/300/200" />}
-              >
-                <Meta title="Blog Post Title" description="Blog post description" />
-              </Card>
-              <Card
-                hoverable
-                cover={<img alt="blog post" src="https://picsum.photos/300/200" />}
-              >
-                <Meta title="Blog Post Title" description="Blog post description" />
-              </Card>
-              <Card
-                hoverable
-                cover={<img alt="blog post" src="https://picsum.photos/300/200" />}
-              >
-                <Meta title="Blog Post Title" description="Blog post description" />
-              </Card>
-            </div>
-            <Pagination defaultCurrent={1} total={50} style={{ marginTop: 20}} />
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
-);
+    <div style={{ padding: '24px',minWidth: '96vw', minHeight: '100vh', maxHeight:"fit-content"  }}>
+      <Input
+        placeholder="Search for health articles"
+        style={{ marginBottom: '16px' }}
+        onChange={(e) => handleSearchClick(e.target.value)}
+      />
+      <Button type="primary" onClick={() => handleSearchClick()}>
+        Search
+      </Button>
+      <List
+        grid={{ gutter: 16, column: 3 }}
+        dataSource={articles}
+        renderItem={(article) => (
+          <List.Item>
+            <Card title={article.title} extra={<a href={article.url}>Read More</a>}>
+              <div>{article.description}</div>
+            </Card>
+          </List.Item>
+        )}
+        pagination={{
+          current: currentPage,
+          pageSize: perPage,
+          onChange: handlePageChange,
+          total: 100 // You can replace this with the total number of articles available
+        }}
+        style={{ marginTop: '16px' }}
+      />
+    </div>
+  );
 }

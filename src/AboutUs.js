@@ -3,7 +3,7 @@ const { Title, Paragraph } = Typography;
 
 export function AboutUs() {
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: 24 }}>
+    <div style={{ minWidth: '96vw', minHeight: '100vh', maxHeight:"fit-content", margin: '0 auto', padding: 24 }}>
       <Title>About Our Fitness App</Title>
       <Paragraph>
         Our fitness app is designed to help you achieve your fitness goals by providing personalized workout plans and tracking your progress.
