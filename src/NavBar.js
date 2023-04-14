@@ -3,6 +3,7 @@ import { HomeOutlined, InfoCircleOutlined, PhoneOutlined } from '@ant-design/ico
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { AboutUs } from './AboutUs';
 import { HomePage } from './HomePage.js'
+import { SleepTracking } from './SleepTracking';
 
 export function NavBar(props) {
   
@@ -28,6 +29,9 @@ export function NavBar(props) {
         </Menu.Item>
       </Menu>
       <Routes>
+        <Route path="/sleep-tracking" element={<SleepTracking />}>
+          
+        </Route>
         <Route path="/about"  element = {<AboutUs/>}>
         </Route>
         <Route path="/contact">

@@ -4,16 +4,21 @@ import { HeartOutlined, BarChartOutlined, CalendarOutlined, MedicineBoxOutlined,
 
 import React from 'react';
 import { useState } from 'react';
-import { NavBar } from './NavBar';
+import { useNavigate } from 'react-router-dom'; // Import the useHistory hook from React Router
 import { Sidebar } from './Sidebar.js';
 
 
 export function HomePage (){
+  const navigate = useNavigate(); // Initialize the useHistory hook
+
   const { Header, Content } = Layout;
   const { Title, Paragraph } = Typography;
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [isDarkMode, setIsDarkMode] = useState(false);
- 
+
+  const handleAnalyzeDataClick = () => {
+    navigate('/sleep-tracking'); // Navigate to the SleepTracking page when the card is clicked
+  };
   const handleClick = () => {
    setIsDarkMode((previousValue) => !previousValue);
   };
@@ -42,7 +47,7 @@ export function HomePage (){
               </Card>
             </Col>
             <Col xs={24} sm={12} lg={8}>
-              <Card hoverable>
+              <Card hoverable onClick={handleAnalyzeDataClick}>
                 <BarChartOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
                 <Title level={3}>Analyze your data</Title>
                 <Paragraph>
