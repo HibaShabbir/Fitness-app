@@ -35,10 +35,10 @@ export function SuggestedBlogs() {
 
   return (
     <div style={{ padding: '24px',minWidth: '96vw', minHeight: '100vh', maxHeight:"fit-content"  }}>
+      <h1>Blogs and Articles </h1>
       <Input
         placeholder="Search for health articles"
         style={{ marginBottom: '16px' }}
-        onChange={(e) => handleSearchClick(e.target.value)}
       />
       <Button type="primary" onClick={() => handleSearchClick()}>
         Search

@@ -6,6 +6,7 @@ import { HomePage } from './HomePage.js'
 import { SleepTracking } from './SleepTracking';
 import { SuggestedBlogs } from './SuggestedBlogs';
 import WaterTracking from './WaterTracking';
+import { SuggestedMeals } from './SuggestedMeals';
 
 export function NavBar(props) {
   
@@ -31,6 +32,7 @@ export function NavBar(props) {
         </Menu.Item>
       </Menu>
       <Routes>
+        <Route path ="/nutrition-plan" element={<SuggestedMeals/>}/>
         <Route path ="/water-tracking" element={<WaterTracking/>}/>
         <Route path="/view-blogs" element={<SuggestedBlogs />}/>
         <Route path="/sleep-tracking" element={<SleepTracking />}>

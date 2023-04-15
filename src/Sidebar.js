@@ -2,6 +2,7 @@ import { Menu, Layout } from 'antd';
 import { MenuOutlined ,TeamOutlined,UserOutlined, UploadOutlined, MailOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Feedback } from './Feedback';
+import { Review } from './Review';
 
 export function Sidebar()
 {

@@ -26,6 +26,9 @@ export function HomePage (){
   const handleWaterTrackingClick=()=>{
     navigate('/water-tracking'); 
   }
+  const handleNutritionPlanClick=()=>{
+    navigate('/nutrition-plan'); 
+  }
   const handleClick = () => {
    setIsDarkMode((previousValue) => !previousValue);
   };
@@ -74,7 +77,7 @@ export function HomePage (){
           </Row>
           <Row gutter={[32, 32]} justify="center" align="middle">
             <Col xs={24} sm={12} lg={8}>
-            <Card hoverable>
+            <Card hoverable onClick={handleNutritionPlanClick}>
             <i class="fas fa-utensils"style={{ fontSize: '64px', color: '#1890ff' }} ></i>
               <Title level={3}>Nutrition plan</Title>
               <Paragraph>
