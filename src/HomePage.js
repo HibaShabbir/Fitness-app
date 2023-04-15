@@ -29,6 +29,10 @@ export function HomePage (){
   const handleNutritionPlanClick=()=>{
     navigate('/nutrition-plan'); 
   }
+  const handleWorkoutplanClick=()=>{
+    navigate('/workout-plan'); 
+  } 
+
   const handleClick = () => {
    setIsDarkMode((previousValue) => !previousValue);
   };
@@ -66,7 +70,7 @@ export function HomePage (){
               </Card>
             </Col>
             <Col xs={24} sm={12} lg={8}>
-              <Card hoverable>
+              <Card hoverable onClick={handleWorkoutplanClick}>
                 <CalendarOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
                 <Title level={3}>Plan your workouts</Title>
                 <Paragraph>
