@@ -8,6 +8,7 @@ import { SuggestedBlogs } from './SuggestedBlogs';
 import WaterTracking from './WaterTracking';
 import { SuggestedMeals } from './SuggestedMeals';
 import { SuggestedWorkoutPlans } from './SuggestedWorkoutPlans';
+import { AdminOptionsPage } from './AdminOptionsPage';
 
 export function NavBar(props) {
   
@@ -33,6 +34,7 @@ export function NavBar(props) {
         </Menu.Item>
       </Menu>
       <Routes>
+      <Route path ="/admin" element={<AdminOptionsPage/>}/>
         <Route path ="/workout-plan" element={<SuggestedWorkoutPlans/>}/>
         <Route path ="/nutrition-plan" element={<SuggestedMeals/>}/>
         <Route path ="/water-tracking" element={<WaterTracking/>}/>
