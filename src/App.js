@@ -12,8 +12,13 @@ import { SuggestedBlogs } from './SuggestedBlogs';
 const darkOrLight= false;
 
 export default function App (){
-  const [isDarkMode, setIsDarkMode] = useState(false);
- 
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // Perform login logic here
+    setIsLoggedIn(true);
+  };
   const handleClick = () => {
    setIsDarkMode((previousValue) => !previousValue);
   };
@@ -39,7 +44,7 @@ export default function App (){
   >
 
     <Card style={{  width: "fit-content", height:"fit-content" }}>
-    <NavBar theme={{ isDarkMode, handleClick }}></NavBar>
+    <NavBar log={{isLoggedIn, setIsLoggedIn}}theme={{ isDarkMode, handleClick }}></NavBar>
    </Card>
    
   </ConfigProvider>

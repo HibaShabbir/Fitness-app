@@ -33,6 +33,9 @@ export function HomePage (){
     navigate('/workout-plan'); 
   } 
 
+  const handleViewVideos=()=>{
+    navigate('/watch-videos');
+  }
   const handleClick = () => {
    setIsDarkMode((previousValue) => !previousValue);
   };
@@ -99,11 +102,11 @@ export function HomePage (){
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={8}>
-          <Card hoverable>
+          <Card hoverable onClick={handleViewVideos}>
             <MedicineBoxOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
-            <Title level={3}>Medicines</Title>
+            <Title level={3}>Videos</Title>
             <Paragraph>
-              Keep track of your medicines and set reminders for when to take them with our medication tracking feature.
+              Watch fitness training videos here. 
             </Paragraph>
           </Card>
         </Col>
@@ -111,7 +114,7 @@ export function HomePage (){
         <Title level={2} style={{ marginTop: '50px' }}>Recommended Blogs</Title>
       <Row gutter={[32, 32]} justify="center" align="middle">
         <Col xs={24} sm={12} lg={8}>
-          <Card hoverable cover={<img alt="blog1" src="https://img.freepik.com/free-vector/holistic-medicine-abstract-concept-vector-illustration-alternative-natural-medicine-holistic-mental-therapy-whole-body-treatment-health-practice-disease-integrative-doctor-abstract-metaphor_335657-1696.jpg?w=2000" style={{ height: '200px', objectFit: 'cover' }} />}>
+          <Card hoverable cover={<img alt="blog1" src="https://img.freepik.com/free-vector/holistic-medicine-abstract-concept-vector-illustration-alternative-natural-medicine-holistic-mental-therapy-whole-body-treatment-health-practice-disease-integrative-doctor-abstract-metaphor_335657-1696.jpg?w=2000" style={{ height: '175px', objectFit: 'cover' }} />}>
             <Title level={3}>FitnessBlender</Title>
             <Paragraph>
               Free full-length workout videos for all fitness levels. HASfit stands for Heart And Soul fitness because we believe everyone deserves to be fit.
@@ -149,9 +152,6 @@ export function HomePage (){
           </div>
         </Col>
         </Row>
-
-      
-
       </Content>
       </div>
       </div>

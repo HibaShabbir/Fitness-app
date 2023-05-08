@@ -1,100 +1,92 @@
 import React, { useState } from "react";
-import './Login.css';
+import { Form, Input, Button, Checkbox, Typography , Row, Col, Card} from "antd";
+import { useNavigate } from 'react-router-dom';
+const { Title } = Typography;
 
-const Login = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export function Login(props) {
+  const { onLogin } = props;
+  const navigate = useNavigate(); // Initialize the useHistory hook
+  const [form] = Form.useForm();
   const [rememberMe, setRememberMe] = useState(false);
 
-  
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSignup =()=>{
+    navigate('/signup');
+  }
+  const onFinish = (values) => {
+    var found = true;
+    var admin= false;
+    // Perform login logic here
 
     // Perform form validation
-    if (!name || !email || !password) {
+    if (!values.name || !values.password) {
       alert("Please fill all fields.");
+      return;
+    }
+
+    if (found && admin){
+      onLogin.handleAdmin();
+    }
+    else if(found && !admin){
+      onLogin.handleLogin();
     } 
-    
+    else {
+      alert("This user does not exist.");
+    }
   };
 
-  
   return (
+    <Card style={{ minWidth: "96vw", minHeight: "100vh", maxHeight: "fit-content", maxWidth: "fit-content" }}>
+       <Row gutter={[32, 32]} justify="center" align="middle">
+       <Col>
+        <img src="FitnessApps.gif" height="600px" width="500px" alt="fitness"></img>
+      </Col>
 
-    <div class="container">
-      <div class="LeftDiv">
-        <br></br>
-      <img src="FitnessApps.gif" height="600px" width="500px"alt="fitness"></img>
-      </div>
+      <Col>
+        <Title style={{ textAlign: "center" }}>FITNESS AND HEALTH APP</Title>
 
-      <div class="RightDiv">
-      <br></br>
-      <br></br>
-      <h1 class="header">FITNESS AND HEALTH APP</h1>
-      
-      <form onSubmit={handleSubmit}>
-
-      <br></br>
-        <h3>
-          UserName:  &nbsp;&nbsp;
-          <input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-          />
-        </h3>
-
-        <h3>
-          Email:  &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-          <input
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-        </h3>
-       
-
-        <h3>
-
-          Password: 
-        &nbsp;&nbsp;&nbsp;
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </h3>
-        <br></br>
+        <Form form={form} onFinish={onFinish} >
         
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          <label>Remember Me</label>
-          
-        <br></br>
-        <br></br>
-        <button id="b1" type="submit">Login</button>
-      </form>
-      </div>
+        <Form.Item
+          label="Username"
+          name="name"
+          rules={[{ required: true, message: 'Please input your username!' }]}
+          labelCol={{ span: 6 }} // set the span for the label column
+          wrapperCol={{ span: 18 }} // set the span for the wrapper column
+        >
+          <Input placeholder="Username" />
+        </Form.Item>
 
-      </div>
-    
+          <Form.Item 
+          label ="Password" 
+          name="password" 
+          rules={[{ required: true, message: 'Please input your password!' }]}
+          labelCol={{ span: 6 }} 
+          wrapperCol={{ span: 18 }}
+          >
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+
+          <Form.Item 
+          labelCol={{ span: 6 }} 
+          wrapperCol={{ span: 18 }}
+          justify="center" align="middle"
+          >
+            
+          <Button type="primary" htmlType="submit">
+            Login
+          </Button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button type="primary" onClick={handleSignup}>
+              Sign Up
+            </Button>
+             
+          </Form.Item>
+         
+        </Form>
+      </Col>
+       </Row>
+    </Card>
   );
-};
+}
 
 export default Login;

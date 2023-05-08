@@ -26,10 +26,15 @@ const data = [
 ];
 
 
-export function AdminOptionsPage() {
+export function AdminOptionsPage(props) {
+  const { logout } = props;
   const [dataSource, setDataSource] = useState(data);
   const [selectedMenuKey, setSelectedMenuKey] = useState('1');
 
+  const handleLogout=()=>
+  {
+    logout();
+  }
   const handleMenuClick = (event) => {
     setSelectedMenuKey(event.key);
   };
@@ -82,6 +87,11 @@ export function AdminOptionsPage() {
           <Breadcrumb.Item>Admin</Breadcrumb.Item>
           <Breadcrumb.Item>{selectedMenuKey}</Breadcrumb.Item>
         </Breadcrumb>
+        <div>
+          <Button onClick={handleLogout}>
+            Logout
+          </Button >
+        </div>
         <Content style={{ padding: '0 50px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
             <Menu

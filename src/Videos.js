@@ -13,15 +13,15 @@ function Videos() {
   };
 
   return (
-    <div className='Videos'>
+    <div className='Videos' style={{minWidth: '100vw', minHeight: '100vh', maxHeight:"fit-content" , maxWidth:'fit-content'}}>
       <br></br><br></br><h1>INSTRUCTIONAL VIDEOS</h1>
-      <div className='container'>
+      <div className='container' >
         <div className='btn-container'>
-            <button onClick={() => scrollToRef(yogaRef)}>YOGA</button><br></br>
-            <button onClick={() => scrollToRef(exerciseRef)}>WEIGHT LOSS EXERCISE</button><br></br>
-            <button onClick={() => scrollToRef(cardioRef)}>CARDIO WORKOUT</button><br></br>
-            <button onClick={() => scrollToRef(facialRef)}>FACIAL EXERCISE</button><br></br>
-            <button onClick={() => scrollToRef(absRef)}>AB WORKOUT</button><br></br><br></br>
+            <button className='vid_btn' onClick={() => scrollToRef(yogaRef)}>YOGA</button><br></br>
+            <button className='vid_btn' onClick={() => scrollToRef(exerciseRef)}>WEIGHT LOSS EXERCISE</button><br></br>
+            <button className='vid_btn' onClick={() => scrollToRef(cardioRef)}>CARDIO WORKOUT</button><br></br>
+            <button className='vid_btn' onClick={() => scrollToRef(facialRef)}>FACIAL EXERCISE</button><br></br>
+            <button className='vid_btn' onClick={() => scrollToRef(absRef)}>AB WORKOUT</button><br></br><br></br>
         </div>
         <div className='img-container'>
             <img src="videos.gif" />
