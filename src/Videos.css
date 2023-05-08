@@ -204,6 +204,21 @@ h1{
 
 }
 
+  .vid_btn{
+    height: 57px;
+    width: 370px;
+    margin-bottom: 40px;
+    margin-left: 25px;
+    border-radius: 4px;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid rgb(63, 154, 196);
+    font-family: sans-serif;
+    background-color: rgb(63, 154, 196);
+  }
 
 .Videos h1 {
   margin-top: 0px;
