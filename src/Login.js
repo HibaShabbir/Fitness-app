@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import { Form, Input, Button, Checkbox, Typography , Row, Col, Card} from "antd";
 import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
@@ -12,26 +13,40 @@ export function Login(props) {
   const handleSignup =()=>{
     navigate('/signup');
   }
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     var found = true;
     var admin= false;
     // Perform login logic here
 
     // Perform form validation
-    if (!values.name || !values.password) {
+    if (!values.email || !values.password) {
       alert("Please fill all fields.");
       return;
     }
 
-    if (found && admin){
-      onLogin.handleAdmin();
+    // Make HTTP request to authenticate user
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', {
+        email: values.email,
+        password: values.password
+      });
+
+      // Handle successful authentication
+      console.log(response.data);
+      if (response.data.success) {
+        if (response.data.admin) {
+          onLogin.handleAdmin();
+        } else {
+          onLogin.handleLogin();
+        }
+      } else {
+        alert("This user does not exist.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while logging in.");
     }
-    else if(found && !admin){
-      onLogin.handleLogin();
-    } 
-    else {
-      alert("This user does not exist.");
-    }
+    
   };
 
   return (
@@ -47,8 +62,8 @@ export function Login(props) {
         <Form form={form} onFinish={onFinish} >
         
         <Form.Item
-          label="Username"
-          name="name"
+          label="Email"
+          name="email"
           rules={[{ required: true, message: 'Please input your username!' }]}
           labelCol={{ span: 6 }} // set the span for the label column
           wrapperCol={{ span: 18 }} // set the span for the wrapper column

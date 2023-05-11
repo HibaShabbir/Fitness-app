@@ -13,6 +13,7 @@ import { AdminOptionsPage } from './AdminOptionsPage';
 import { Login } from './Login.js';
 import Videos from './Videos';
 import { SignUp } from './SignUp';
+import axios from 'axios';
 
 export function NavBar(props) {
   const { theme } = props;
@@ -37,15 +38,23 @@ export function NavBar(props) {
     // Update localStorage and state when user logs in
     localStorage.setItem('isLoggedIn', 'true');
     setIsLoggedIn(true);
+    console.log("handlelogin trigger");
   };
 
-  const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    // Send POST request to server endpoint for logging out
+    await axios.post('/api/logout');
+
     // Update localStorage and state when user logs out
     localStorage.setItem('isLoggedIn', 'false');
     setIsLoggedIn(false);
     localStorage.setItem('isAdmin', 'false');
     setIsAdmin(false);
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <Router>
@@ -92,8 +101,8 @@ export function NavBar(props) {
           <Route path="/contact">
             {/* Add your Contact page component here */}
           </Route>
-          <Route path="/" element = {<HomePage/>}>
-          </Route>
+          <Route path="/" element = {<HomePage/>}/>
+          <Route path="/signup" element = {<HomePage/>}/>
         </Routes></>)}
 
 
@@ -101,7 +110,7 @@ export function NavBar(props) {
       {!isLoggedIn && (
          <Routes>
           <Route path ="/" element={<Login onLogin={{handleLogin , handleAdmin}}></Login>}/>
-          <Route path="/signup" element={<SignUp/>}/>
+          <Route path="/signup" element={<SignUp onSignup={handleLogin}></SignUp>}/>
          </Routes>
             
 

@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Radio } from 'antd';
+import axios from 'axios';
 
-export function SignUp() {
-  const [error, setError] = useState(null);
-
+export function SignUp(props) {
+  const { onSignup } = props;
+  const [error, setError] = useState(false);
+  const [signupClicked, setSignupClicked] = useState(false);
+ 
   const handleFinish = (values) => {
+    console.log("handleFinish called with values: ", values);
+    setSignupClicked(true);
     // Perform validation on fields
     if (!values.email || !values.password || !values.gender || !values.height || !values.weight || !values.age || !values.gender) {
       setError('Please enter all the fields');
       return;
     }
+    // Make a request to the server using Axios
+    axios.post('http://localhost:5000/api/signup', values)
+      .then(response => {
+        // Update the state with the received data
+        console.log(response.data);
+        onSignup();
+      
+       })
+      .catch(error => {
+        setError(error.response.data.message);
+        console.log("error"+error.response.data.message);
+      });
   };
 
   return (
     <div style={{ minWidth: "96vw", minHeight: "100vh", maxHeight: "fit-content", maxWidth: "fit-content" }}>
       <div className='container'>
-        <h1>Login</h1>
+        <h1>Signup</h1>
         <br />
-        {error && <div className="error">{error}</div>}
         <div className='form-container'>
           <Form onFinish={handleFinish}>
             <Form.Item
@@ -56,7 +72,7 @@ export function SignUp() {
             </Form.Item>
 
             <Form.Item
-              label="Height"
+              label="Height(in inches)"
               name="height"
               rules={[{ required: true, message: 'Please input your height!' }]}
             >
@@ -87,16 +103,19 @@ export function SignUp() {
 
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Login
+                Signup
               </Button>
+            </Form.Item>
+
+            <Form.Item>
+              {error && <div className="error">{error}</div>}
             </Form.Item>
           </Form>
         </div>
-
         <div className='img-container'>
           <img src='Signup.gif' alt="Signup" />
         </div>
       </div>
     </div>
-  );
+  )
 }
