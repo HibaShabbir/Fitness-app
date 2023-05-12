@@ -11,6 +11,7 @@ import { SuggestedMeals } from './SuggestedMeals';
 import { SuggestedWorkoutPlans } from './SuggestedWorkoutPlans';
 import { AdminOptionsPage } from './AdminOptionsPage';
 import { Login } from './Login.js';
+import {Personal_Info} from './Personal_Info';
 import Videos from './Videos';
 import { SignUp } from './SignUp';
 import axios from 'axios';
@@ -63,7 +64,7 @@ const handleLogout = async () => {
            <Routes>
             <Route path ="/" element={<AdminOptionsPage logout={handleLogout}/>}/>
             </Routes>)}
-        {isLoggedIn && (
+        {isLoggedIn && !isAdmin &&(
         <>
         
           <Menu mode="horizontal" defaultSelectedKeys={['1']} style={{display:"flex"}}>
@@ -91,6 +92,7 @@ const handleLogout = async () => {
         </Menu>
         <Routes>     
           <Route path ="/workout-plan" element={<SuggestedWorkoutPlans/>}/>
+          <Route path ="/view-profile" element={<Personal_Info/>}/>
           <Route path ="/nutrition-plan" element={<SuggestedMeals/>}/>
           <Route path ="/water-tracking" element={<WaterTracking/>}/>
           <Route path="/view-blogs" element={<SuggestedBlogs />}/>

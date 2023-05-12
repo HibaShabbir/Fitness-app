@@ -34,7 +34,7 @@ export function Login(props) {
       // Handle successful authentication
       console.log(response.data);
       if (response.data.success) {
-        if (response.data.admin) {
+        if (response.data.isAdmin) {
           onLogin.handleAdmin();
         } else {
           onLogin.handleLogin();

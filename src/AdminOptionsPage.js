@@ -1,6 +1,7 @@
-import { useState } from 'react';
 import { Layout, Menu, Breadcrumb, Table, Popconfirm, Button } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const { Content } = Layout;
 
@@ -27,10 +28,29 @@ const data = [
 
 
 export function AdminOptionsPage(props) {
+
   const { logout } = props;
   const [dataSource, setDataSource] = useState(data);
+  const [userDataSource, setUserDataSource] = useState([]);
   const [selectedMenuKey, setSelectedMenuKey] = useState('1');
-
+  
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/users');
+      const data = response.data;
+      console.log("data"+data);
+      setUserDataSource(data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+  
+  useEffect(() => {
+    if (selectedMenuKey === '2') {
+      fetchUsers();
+    }
+  }, [selectedMenuKey]);
+  
   const handleLogout=()=>
   {
     logout();
@@ -44,10 +64,87 @@ export function AdminOptionsPage(props) {
     setDataSource((prevDataSource) => prevDataSource.filter((item) => item.key !== key));
   };
 
+  const handleDeleteUser = async (email) => {
+    try {
+      // Encode email parameter
+      const encodedEmail = encodeURIComponent(email);
+      
+      // Delete user from backend API
+      await fetch(`http://localhost:5000/api/users/${encodedEmail}`, {
+        method: 'DELETE',
+      });
+  
+      // Remove user from userDataSource state
+      setUserDataSource((prevDataSource) =>
+        prevDataSource.filter((item) => item.email !== email)
+      );
+    } catch (error) {
+      console.error(`Error deleting user with email ${email}:`, error);
+    }
+  };
+  
 
   const handleAdd = () => {
     // TODO: Implement add functionality
   };
+
+  const userColumns = [
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      key: 'gender',
+    },
+    {
+      title: 'Height',
+      dataIndex: 'height',
+      key: 'height',
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'weight',
+      key: 'weight',
+    },
+    {
+      title: 'Disease',
+      dataIndex: 'disease',
+      key: 'disease',
+    },
+    {
+      title: 'Food',
+      dataIndex: 'food',
+      key: 'food',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Popconfirm
+          title="Are you sure you want to delete this user?"
+          onConfirm={() => handleDeleteUser(record.email)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="danger" icon={<DeleteOutlined />} />
+        </Popconfirm>
+      ),
+    },
+  ];
+  
   const columns = [
     {
       title: 'Name',
@@ -113,8 +210,12 @@ export function AdminOptionsPage(props) {
               </>
             )}
             {selectedMenuKey === '2' && (
-              <div>TODO: Implement user management</div>
-            )}
+              <>
+              <div style={{ marginBottom: 16 }}>
+              TODO: Implement user management
+              </div>
+              <Table dataSource={userDataSource} columns={userColumns} /></>
+              )}
           </div>
         </Content>
       </Layout>

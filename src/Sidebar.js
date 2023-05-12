@@ -3,9 +3,15 @@ import { MenuOutlined ,TeamOutlined,UserOutlined, UploadOutlined, MailOutlined }
 import { useState } from 'react';
 import { Feedback } from './Feedback';
 import { Review } from './Review';
+import { useNavigate } from 'react-router-dom';
 
 export function Sidebar()
 {
+    const navigate = useNavigate();
+    
+    const handleViewProfile=()=>{
+        navigate('/view-profile'); 
+    }
     const [collapsed, setCollapsed] = useState(false);
     const toggleCollapsed = () => {
       setCollapsed(!collapsed);
@@ -18,19 +24,19 @@ export function Sidebar()
             </div>
             <Layout.Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} >
                 <Menu mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1" icon={<UserOutlined />}>
-                        Option 1
+                    <Menu.Item key="1" icon={<UserOutlined />} onClick={handleViewProfile}>
+                        My Profile
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<TeamOutlined />}>
+                    {/*<Menu.Item key="2" icon={<TeamOutlined />}>
                         Option 2
                     </Menu.Item>
                     <Menu.Item key="3" icon={<UploadOutlined />}>
                         Option 3
-                    </Menu.Item>
-                    <Menu.Item key="5" icon={<MailOutlined />}>
+                    </Menu.Item>*/}
+                    <Menu.Item key="2" icon={<MailOutlined />}>
                     <Feedback></Feedback>
                     </Menu.Item>
-                    <Menu.Item key="6" >
+                    <Menu.Item key="3" >
                     <Review/>
                     </Menu.Item>
                 </Menu>

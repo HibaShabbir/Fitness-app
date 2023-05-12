@@ -10,7 +10,7 @@ export function SleepTracking() {
   };
 
   return (
-    <div style={{width :"100vw" , height:"100vh" }}>
+    <div style={{width :"96vw" , height:"100vh" }}>
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Title level={3}>Sleep Tracking</Title>

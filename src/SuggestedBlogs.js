@@ -34,7 +34,7 @@ export function SuggestedBlogs() {
   };
 
   return (
-    <div style={{ padding: '24px',minWidth: '96vw', minHeight: '100vh', maxHeight:"fit-content"  }}>
+    <div style={{ padding: '24px',minWidth: '94vw', minHeight: '100vh', maxHeight:"fit-content"  }}>
       <h1>Blogs and Articles </h1>
       <Input
         placeholder="Search for health articles"

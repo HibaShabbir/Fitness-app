@@ -13,7 +13,7 @@ function Videos() {
   };
 
   return (
-    <div className='Videos' style={{minWidth: '100vw', minHeight: '100vh', maxHeight:"fit-content" , maxWidth:'fit-content'}}>
+    <div className='Videos' style={{minWidth: '96vw', minHeight: '100vh', maxHeight:"fit-content" , maxWidth:'fit-content'}}>
       <br></br><br></br><h1>INSTRUCTIONAL VIDEOS</h1>
       <div className='container' >
         <div className='btn-container'>

@@ -5,9 +5,9 @@ import './Personal_Info.css';
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 
-const activityData = [  { label: 'Walked 1 mile', points: 10 },{ label: 'Did Cardiac Wrokout', points: 30 },  { label: 'Ran 1 mile', points: 20 },  { label: 'Biked 5 miles', points: 30 },  { label: 'Swam 20 laps', points: 40 },];
 
-const Personal_Info = () => {
+export function Personal_Info(){
+  const activityData = [  { label: 'Walked 1 mile', points: 10 },{ label: 'Did Cardiac Wrokout', points: 30 },  { label: 'Ran 1 mile', points: 20 },  { label: 'Biked 5 miles', points: 30 },  { label: 'Swam 20 laps', points: 40 },];
   const [userData, setUserData] = useState({
     weight: 70,
     height: 170,
@@ -64,7 +64,7 @@ const Personal_Info = () => {
             <div className="user-data">
               <div className="personal-info">
                 <div className="image-container">
-                  <img src="info.gif" alt="User Profile" />
+                  <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/14cb6b84808917.5d68451d7d126.gif" alt="User Profile" style={{borderRadius:"100%"}}/>
                 </div>
                 <div className="info-container">
                   <div className="info-item">
@@ -207,6 +207,4 @@ const Personal_Info = () => {
 
 );
 };
-
-export default Personal_Info;
 

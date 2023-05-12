@@ -4,9 +4,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
+const cookieParser = require('cookie-parser'); // add cookie-parser
 
 // Create Express app
 const app = express();
+app.use(cookieParser()); // use cookie-parser
 app.use(session({
   secret: 'mykey123',
   resave: false,
@@ -47,7 +49,7 @@ const User = mongoose.model('User', userSchema);
 // Define server endpoint for creating a new user
 app.post('/api/signup', async (req, res) => {
   // Extract user data from request body
-  const { email, password, age, gender, height, weight, disease, food } = req.body;
+  const { email, password, age, gender, height, weight, disease, food , role } = req.body;
   
   // Check if user with same email already exists
   const existingUser = await User.findOne({ email });
@@ -56,14 +58,14 @@ app.post('/api/signup', async (req, res) => {
   }
 
   // Create new User instance with extracted data
-  const newUser = new User({ email, password, age, gender, height, weight, disease, food });
+  const newUser = new User({ email, password, age, gender, height, weight, disease, food , role});
   
   // Save new user data to MongoDB
   try {
     const result = await newUser.save();
     // handle result
     console.log('New user created:');
-    res.redirect('http://localhost:3000/');
+    res.status(201).json({ message: 'User created successfully' });
   } catch (err) {
     // handle errora
     console.error('Error saving user data to MongoDB:', err);
@@ -71,7 +73,7 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-
+//login endpoint
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -86,9 +88,17 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).send({ success: false, message: 'Invalid username or password' });
     }
 
-    // Login successful, store the user session
+    // Set user session data
     req.session.user = user;
-    const isAdmin = user.role === 'admin'; // assuming you have a 'role' property in your user object that indicates whether the user is an admin
+
+    // Set a cookie to store the user's session ID
+    res.cookie('sessionID', req.sessionID, {
+      httpOnly: true,
+      secure: false, // Set to 'true' if using HTTPS
+      sameSite: 'none' // Set to 'none' if cross-origin
+    });
+
+    const isAdmin = user.role === 'admin';
     return res.send({ success: true, isAdmin, user });
   } catch (err) {
     console.error(err);
@@ -96,10 +106,14 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+
+// Define endpoint for checking user session
 app.get('/api/login', (req, res) => {
-  const user = req.session.user;
-  console.log("session : "+req.session.user);
-  if (user) {
+  const sessionID = req.cookies.sessionID;
+
+  if (req.sessionID === sessionID && req.session.user) {
+    const user = req.session.user;
+    console.log("session : " + user);
     const isAdmin = user.role === 'admin'; // 'role' property in your user object that indicates whether the user is an admin
     return res.send({ success: true, isAdmin, user });
   } else {
@@ -107,14 +121,55 @@ app.get('/api/login', (req, res) => {
   }
 });
 
+// Define endpoint for logging out user
 app.post('/api/logout', (req, res) => {
+  // Clear the session data and remove the session cookie
+  const user = req.session.user;
   req.session.destroy((err) => {
     if (err) {
       console.error('Error destroying user session:', err);
       return res.status(500).send('Error destroying user session');
     }
-    return res.status(200).send('Logged out successfully');
+    
+    res.clearCookie('sessionID');
+    return res.status(200).send({ user , message: 'Logged out successfully'});
   });
+});
+
+// Middleware function to check if the user is an admin
+/*const isAdmin = (req, res, next) => {
+  const user = req.session.user;
+  console.log(user);
+  if (user && user.role === 'admin') {
+    next();
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+}*/
+
+// to fetch all users
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find(); // fetch all users from database
+    res.status(200).json(users); // send the response with status code 200 and JSON data
+  } catch (error) {
+    console.log("message users cannot be sent !");
+    res.status(500).json({ message: 'Internal server error' }); // send error response with status code 500 and error message
+  }
+});
+
+// Define endpoint for deleting a user by ID
+app.delete('/api/users/:email', async (req, res) => {
+  try {
+    // Decode email parameter
+    const userEmail = decodeURIComponent(req.params.email);
+    console.log(userEmail);
+    await User.findOneAndDelete({ email: userEmail });
+    res.status(200).json({ message: `User with email ${userEmail} has been deleted` });
+  } catch (error) {
+    console.error(`Error deleting user with email ${userEmail}:`, error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 

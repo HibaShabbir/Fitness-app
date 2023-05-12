@@ -1,6 +1,6 @@
 import { Button, ConfigProvider,DatePicker , Breadcrumb, theme } from 'antd';
 import { Layout, Typography, Row, Col, Card } from 'antd';
-import { HeartOutlined, BarChartOutlined, CalendarOutlined, MedicineBoxOutlined, } from '@ant-design/icons';
+import { HeartOutlined, BarChartOutlined, CalendarOutlined, MedicineBoxOutlined, PlayCircleOutlined, } from '@ant-design/icons';
 
 import React from 'react';
 import { useState } from 'react';
@@ -68,7 +68,7 @@ export function HomePage (){
                 <BarChartOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
                 <Title level={3}>Analyze your data</Title>
                 <Paragraph>
-                  Get insights into your performance and see how you're improving over time with our powerful analytics tools.
+                  Get insights into your performance and see how you're improving over time.
                 </Paragraph>
               </Card>
             </Col>
@@ -103,7 +103,7 @@ export function HomePage (){
         </Col>
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable onClick={handleViewVideos}>
-            <MedicineBoxOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
+            <PlayCircleOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
             <Title level={3}>Videos</Title>
             <Paragraph>
               Watch fitness training videos here. 
@@ -114,30 +114,30 @@ export function HomePage (){
         <Title level={2} style={{ marginTop: '50px' }}>Recommended Blogs</Title>
       <Row gutter={[32, 32]} justify="center" align="middle">
         <Col xs={24} sm={12} lg={8}>
-          <Card hoverable cover={<img alt="blog1" src="https://img.freepik.com/free-vector/holistic-medicine-abstract-concept-vector-illustration-alternative-natural-medicine-holistic-mental-therapy-whole-body-treatment-health-practice-disease-integrative-doctor-abstract-metaphor_335657-1696.jpg?w=2000" style={{ height: '175px', objectFit: 'cover' }} />}>
+          <Card hoverable cover={<img alt="blog1" src="https://img.freepik.com/free-vector/holistic-medicine-abstract-concept-vector-illustration-alternative-natural-medicine-holistic-mental-therapy-whole-body-treatment-health-practice-disease-integrative-doctor-abstract-metaphor_335657-1696.jpg?w=2000" style={{ height: '200px', objectFit: 'cover' }} />}>
             <Title level={3}>FitnessBlender</Title>
             <Paragraph>
-              Free full-length workout videos for all fitness levels. HASfit stands for Heart And Soul fitness because we believe everyone deserves to be fit.
+              HASfit stands for Heart And Soul fitness because we believe everyone deserves to be fit.
             </Paragraph>
-            <Button type="primary">Visit Blog</Button>
+            <Button type="primary" onClick={() => window.location.href = "https://www.fitnessblender.com/articles"}>Visit Blog</Button>
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable cover={<img alt="blog2" src="https://i.pinimg.com/736x/17/1d/3a/171d3af76098f4844094b8951d96c047.jpg" style={{ height: '200px', objectFit: 'cover' }} />}>
             <Title level={3}>Tone It Up</Title>
             <Paragraph>
-              Daily workout videos to tone every inch of your body. At Tone It Up we believe in whole body wellness.
+            The Benefits of Mindful Eating can help you become develop a healthier relationship with food.
             </Paragraph>
-            <Button type="primary">Visit Blog</Button>
+            <Button type="primary" onClick={() => window.location.href = "https://www.healthline.com/nutrition/mindful-eating-guide"}>Visit Blog</Button>
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable cover={<img alt="blog3" src="https://i.pinimg.com/564x/0c/c7/67/0cc767db28c09cece26017ec036d68e5.jpg" style={{ height: '200px', objectFit: 'cover' }} />}>
-            <Title level={3}>Nerd Fitness</Title>
+            <Title level={3}>Ace Fitness</Title>
             <Paragraph>
               Helping you lose weight, get stronger, live better. We help desk jockeys, nerds, and average Joes level up their lives.
             </Paragraph>
-            <Button type="primary">Visit Blog</Button>
+            <Button type="primary"onClick={() => window.location.href = "https://www.acefitness.org/resources/everyone/blog/"}>Visit Blog</Button>
           </Card>
         </Col>
       </Row>
