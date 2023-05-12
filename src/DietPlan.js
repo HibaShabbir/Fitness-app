@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Table, Button } from "antd";
-import './DietPlan.css'
+import { Table, Button, Modal, Form, Input } from "antd";
+import { FaStar } from "react-icons/fa";
+import './DietPlan.css';
 
 const weeklyDietPlans = {
   cardiac: [
@@ -52,8 +53,18 @@ const weeklyDietPlans = {
 
 function DietPlan() {
   const [dietPlan, setDietPlan] = useState("cardiac");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [form] = Form.useForm(); // Create a form instance
 
-  const columns = [    {      title: "",      dataIndex: 0,      key: 0,    },    {      title: "Breakfast",      dataIndex: 1,      key: 1,    },    {      title: "Snack 1",      dataIndex: 2,      key: 2,    },    {      title: "Lunch",      dataIndex: 3,      key: 3,    },    {      title: "Snack 2",      dataIndex: 4,      key: 4,    },    {      title: "Dinner",      dataIndex: 5,      key: 5,    },  ];
+  const columns = [
+    { title: "", dataIndex: 0, key: 0 },
+    { title: "Breakfast", dataIndex: 1, key: 1 },
+    { title: "Snack 1", dataIndex: 2, key: 2 },
+    { title: "Lunch", dataIndex: 3, key: 3 },
+    { title: "Snack 2", dataIndex: 4, key: 4 },
+    { title: "Dinner", dataIndex: 5, key: 5 },
+  ];
 
   const data = weeklyDietPlans[dietPlan];
 
@@ -61,21 +72,78 @@ function DietPlan() {
     setDietPlan(plan);
   };
 
+  const handleReviewClick = () => {
+    setModalVisible(true);
+    setRating(0); // Reset the rating
+    form.resetFields(); // Clear the form field value
+  };
+
+  const handleReviewSubmit = (values) => {
+    console.log("Review submitted:", values);
+    // Handle the review submission here
+    setModalVisible(false);
+  };
+
   return (
     <>
       <div>
-      <div className="logo" >
-        <h2>DIET PLAN</h2>
-        </div><br></br>
-        <Button onClick={() => handlePlanChange("cardiac")}>Cardiac </Button>
-        <Button onClick={() => handlePlanChange("gastritis")}>Gastritis </Button>
+        <div className="logo">
+          <h2>DIET PLAN</h2>
+        </div>
+        <br></br>
+        <Button onClick={() => handlePlanChange("cardiac")}>Cardiac</Button>
+        <Button onClick={() => handlePlanChange("gastritis")}>Gastritis</Button>
         <Button onClick={() => handlePlanChange("weightLoss")}>Weight Loss</Button>
-        <Button onClick={() => handlePlanChange("diabetes")}>Diabetes </Button>
+        <Button onClick={() => handlePlanChange("diabetes")}>Diabetes</Button>
         <Button onClick={() => handlePlanChange("muscleGain")}>Muscle Gain</Button>
-      </div><br></br>
+      </div>
+      <br></br>
       <Table columns={columns} dataSource={data} pagination={false} />
-   </>
-   );
-  }
-  
-  export default DietPlan;
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <Button type="primary" onClick={handleReviewClick}>
+          <i className="fa fa-thumbs-up" aria-hidden="true" color="white" size="15"></i>
+          &nbsp;&nbsp;&nbsp;&nbsp;Give Review
+        </Button>
+      </div>
+      
+      <Modal
+        title="Diet Plan Review"
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={null}
+      >
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <Form form={form} onFinish={handleReviewSubmit}>
+          <Form.Item
+            label="Your review"
+            name="review"
+           
+          >
+            <Input.TextArea placeholder="Enter your review here" />
+          </Form.Item>
+
+          <Form.Item>
+          <label> Your Rating:&nbsp;&nbsp; &nbsp;</label>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <FaStar
+                key={star}
+                size={24}
+                color={rating >= star ? "#1890ff" : "#c0c0c0"}
+                onClick={() => setRating(star)}
+                style={{ cursor: "pointer" }}
+              />
+            ))}
+          </Form.Item>
+
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form>
+        </div>
+      </Modal>
+      
+    </>
+  );
+};
+
+export default DietPlan;
