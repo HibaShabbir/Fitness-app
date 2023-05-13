@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 export function Sidebar()
 {
     const navigate = useNavigate();
-    
+
     const handleViewProfile=()=>{
         navigate('/view-profile'); 
     }
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const toggleCollapsed = () => {
       setCollapsed(!collapsed);
     };
@@ -36,9 +36,7 @@ export function Sidebar()
                     <Menu.Item key="2" icon={<MailOutlined />}>
                     <Feedback></Feedback>
                     </Menu.Item>
-                    <Menu.Item key="3" >
-                    <Review/>
-                    </Menu.Item>
+                    
                 </Menu>
             </Layout.Sider>
         </div>

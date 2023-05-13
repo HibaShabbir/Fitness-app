@@ -13,31 +13,35 @@ export function Login(props) {
   const handleSignup =()=>{
     navigate('/signup');
   }
+  
   const onFinish = async (values) => {
-    var found = true;
-    var admin= false;
+    var found = false;
+    var admin = false;
+  
     // Perform login logic here
-
+  
     // Perform form validation
     if (!values.email || !values.password) {
-      alert("Please fill all fields.");
+
+      alert("Please fill all fields."+"username = " +values.email+ values.password);
       return;
     }
-
+  
     // Make HTTP request to authenticate user
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post("http://localhost:5000/api/login", {
         email: values.email,
-        password: values.password
+        password: values.password,
       });
-
+  
       // Handle successful authentication
-      console.log(response.data);
+      console.log("user login " + response);
       if (response.data.success) {
         if (response.data.isAdmin) {
-          onLogin.handleAdmin();
+          found = true;
+          admin = true;
         } else {
-          onLogin.handleLogin();
+          found = true;
         }
       } else {
         alert("This user does not exist.");
@@ -46,8 +50,18 @@ export function Login(props) {
       console.error(error);
       alert("An error occurred while logging in.");
     }
-    
+  
+    if (found) {
+      if (admin) {
+        console.log("Admin logged in");
+        onLogin.handleAdmin();
+      } else {
+        console.log("User logged in" );
+        onLogin.handleLogin();
+      }
+    }
   };
+  
 
   return (
     <Card style={{ minWidth: "96vw", minHeight: "100vh", maxHeight: "fit-content", maxWidth: "fit-content" }}>
@@ -59,7 +73,7 @@ export function Login(props) {
       <Col>
         <Title style={{ textAlign: "center" }}>FITNESS AND HEALTH APP</Title>
 
-        <Form form={form} onFinish={onFinish} >
+        <Form form={form} onFinish={onFinish}>
         
         <Form.Item
           label="Email"
@@ -87,7 +101,7 @@ export function Login(props) {
           justify="center" align="middle"
           >
             
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType='submit'>
             Login
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

@@ -41,11 +41,13 @@ export default function App (){
     },
       algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
     }}
+    
   >
-
+    <div style={{backgroundColor: isDarkMode ? "black": "white"}}>
     <Card style={{  width: "fit-content", height:"fit-content" }}>
     <NavBar log={{isLoggedIn, setIsLoggedIn}}theme={{ isDarkMode, handleClick }}></NavBar>
    </Card>
+   </div>
    
   </ConfigProvider>
   

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Table, Button, Modal, Form, Input } from "antd";
 import { FaStar } from "react-icons/fa";
-import './DietPlan.css';
 
 const weeklyDietPlans = {
   cardiac: [
@@ -51,7 +50,7 @@ const weeklyDietPlans = {
   ],
 };
 
-function DietPlan() {
+export function DietPlan() {
   const [dietPlan, setDietPlan] = useState("cardiac");
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
@@ -85,17 +84,17 @@ function DietPlan() {
   };
 
   return (
-    <>
+    <div style={{width :"96vw" , height:"100vh" }}>
       <div>
         <div className="logo">
           <h2>DIET PLAN</h2>
         </div>
         <br></br>
-        <Button onClick={() => handlePlanChange("cardiac")}>Cardiac</Button>
-        <Button onClick={() => handlePlanChange("gastritis")}>Gastritis</Button>
-        <Button onClick={() => handlePlanChange("weightLoss")}>Weight Loss</Button>
-        <Button onClick={() => handlePlanChange("diabetes")}>Diabetes</Button>
-        <Button onClick={() => handlePlanChange("muscleGain")}>Muscle Gain</Button>
+        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("cardiac")}>Cardiac</Button> &nbsp;&nbsp;
+        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("gastritis")}>Gastritis</Button> &nbsp;&nbsp;
+        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("weightLoss")}>Weight Loss</Button>  &nbsp;&nbsp;
+        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("diabetes")}>Diabetes</Button>  &nbsp;&nbsp;
+        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("muscleGain")}>Muscle Gain</Button>
       </div>
       <br></br>
       <Table columns={columns} dataSource={data} pagination={false} />
@@ -117,7 +116,6 @@ function DietPlan() {
           <Form.Item
             label="Your review"
             name="review"
-           
           >
             <Input.TextArea placeholder="Enter your review here" />
           </Form.Item>
@@ -142,8 +140,6 @@ function DietPlan() {
         </div>
       </Modal>
       
-    </>
+    </div>
   );
 };
-
-export default DietPlan;

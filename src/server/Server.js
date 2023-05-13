@@ -5,9 +5,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const cookieParser = require('cookie-parser'); // add cookie-parser
-
+var currSession;
 // Create Express app
+console.log('Starting app...');
 const app = express();
+console.log('app started!');
 app.use(cookieParser()); // use cookie-parser
 app.use(session({
   secret: 'mykey123',
@@ -15,12 +17,19 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     secure: false,
-    sameSite: 'none',
+    sameSite: 'lax',
     maxAge: 3600000
   }
 }));
 
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Accept', '*/*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); 
+  next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -64,6 +73,7 @@ app.post('/api/signup', async (req, res) => {
   try {
     const result = await newUser.save();
     // handle result
+    currSession=newUser;
     console.log('New user created:');
     res.status(201).json({ message: 'User created successfully' });
   } catch (err) {
@@ -92,14 +102,13 @@ app.post('/api/login', async (req, res) => {
     req.session.user = user;
 
     // Set a cookie to store the user's session ID
-    res.cookie('sessionID', req.sessionID, {
-      httpOnly: true,
-      secure: false, // Set to 'true' if using HTTPS
-      sameSite: 'none' // Set to 'none' if cross-origin
-    });
+    res.cookie('sessionID', req.sessionID);
+    currSession=user;
+    console.log("res.cookie.sessionID' = "+ req.sessionID);
 
     const isAdmin = user.role === 'admin';
     return res.send({ success: true, isAdmin, user });
+    
   } catch (err) {
     console.error(err);
     return res.status(500).send({ success: false, message: 'Internal server error' });
@@ -108,17 +117,15 @@ app.post('/api/login', async (req, res) => {
 
 
 // Define endpoint for checking user session
-app.get('/api/login', (req, res) => {
+app.get('/api/login-info', (req, res) => {
   const sessionID = req.cookies.sessionID;
-
-  if (req.sessionID === sessionID && req.session.user) {
-    const user = req.session.user;
-    console.log("session : " + user);
+  //console.log("sessionId = "+sessionID);
+  //console.log("req.session = " + currSession);
+  //(req.sessionID === sessionID && req.session.user) {
+    const user = currSession;
     const isAdmin = user.role === 'admin'; // 'role' property in your user object that indicates whether the user is an admin
     return res.send({ success: true, isAdmin, user });
-  } else {
-    return res.send({ success: false, message: 'No user session' });
-  }
+  
 });
 
 // Define endpoint for logging out user
@@ -172,6 +179,41 @@ app.delete('/api/users/:email', async (req, res) => {
   }
 });
 
+const getUserByEmail = async (email) => {
+  try {
+    const user = await User.findOne({ email });
+    return user;
+  } catch (error) {
+    throw new Error(`Error while finding user by email: ${error.message}`);
+  }
+};
 
+app.get('/api/user/profile', async (req, res) => {
+  try {
+    const user = currSession;
+    const email = user.email;
+    const userUppdate = await User.findOne({ email });
+    if (!userUpdate) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+ app.put('/api/user/profile', async (req, res) => {
+  try {
+    const email=currSession.email;
+    console.log(email);
+    const { weight, height, age, gender, disease, points } = req.body;
+    const user = await User.findOneAndUpdate({ email }, { weight, height, age, gender, disease, points }, { new: true });
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
 // Start server listening on port 5000
 app.listen(5000, () => console.log('Server started listening on port 5000'));

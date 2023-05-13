@@ -212,7 +212,7 @@ export function AdminOptionsPage(props) {
             {selectedMenuKey === '2' && (
               <>
               <div style={{ marginBottom: 16 }}>
-              TODO: Implement user management
+              
               </div>
               <Table dataSource={userDataSource} columns={userColumns} /></>
               )}

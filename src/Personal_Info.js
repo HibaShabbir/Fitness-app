@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
+import axios from 'axios';
 import { Layout, Form, Input, InputNumber, Select, Button, message, Modal } from 'antd';
 import './Personal_Info.css';
 
@@ -20,6 +21,20 @@ export function Personal_Info(){
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [isEditable, setIsEditable] = useState(false);
+  
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/login-info`,  { withCredentials: true });
+      console.log(response.data.user);
+      setUserData(response.data.user);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const handleActivity = (points) => {
     setUserData({
@@ -29,18 +44,27 @@ export function Personal_Info(){
     message.success('Activity recorded successfully');
   };
 
-  const onFinish = (values) => {
-    setUserData({
-      weight: values.weight,
-      height: values.height,
-      age: values.age,
-      gender: values.gender,
-      disease: values.disease,
-      points: userData.points,
-    });
-    setVisible(false);
-    setIsEditable(false);
+
+  const onFinish = async (values) => {
+    try {
+      const updatedUserData = {
+        weight: values.weight,
+        height: values.height,
+        age: values.age,
+        gender: values.gender,
+        disease: values.disease,
+        points: userData.points,
+      };
+  
+      const response = await axios.put('http://localhost:5000/api/user/profile', updatedUserData);
+      setUserData(updatedUserData);
+      setVisible(false);
+      // handle success response here
+    } catch (error) {
+      // handle error here
+    }
   };
+  
 
   const showModal = () => {
     setVisible(true);
@@ -116,7 +140,7 @@ export function Personal_Info(){
                 }}
                 onFinish={onFinish}
               >
-                          <Form.Item
+            <Form.Item
               label="Weight"
               name="weight"
               rules={[

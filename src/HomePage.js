@@ -29,6 +29,10 @@ export function HomePage (){
   const handleNutritionPlanClick=()=>{
     navigate('/nutrition-plan'); 
   }
+
+  const handleSuggestedMeals=()=>{
+    navigate('/suggested-meals'); 
+  }
   const handleWorkoutplanClick=()=>{
     navigate('/workout-plan'); 
   } 
@@ -144,6 +148,30 @@ export function HomePage (){
 
       <div style={{ textAlign: 'center', marginTop: '50px' }}>
         <Button type="primary" size="large" onClick={handleViewMoreBlogs}>View More</Button>
+      </div>
+        </Card>
+        <Card>
+        <Title level={2} style={{ marginTop: '50px' }}>Suggested Meals</Title>
+      <Row gutter={[32, 32]} justify="center" align="middle">
+        <Col xs={24} sm={12} lg={8}>
+          <Card hoverable cover={<img alt="breakfast" src="https://cdn.dribbble.com/users/1522528/screenshots/6123013/adac_socialmedia_march2018-v3.gif" style={{ objectFit: 'cover' }} />}>
+            <Title level={3}>Breakfast</Title>
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={8}>
+          <Card hoverable cover={<img alt="lunch" src="https://cdn.dribbble.com/users/255091/screenshots/11203805/media/8984c304e48254d24f0d2d9c3df1745c.gif" style={{ objectFit: 'cover' }} />}>
+            <Title level={3}>Lunch</Title>
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={8}>
+          <Card hoverable cover={<img alt="dinner" src="https://i.pinimg.com/originals/15/db/8c/15db8c4de083536fe5193fd395042243.gif" style={{objectFit: 'cover' }} />}>
+            <Title level={3}>Dinner</Title>
+          </Card>
+        </Col>
+      </Row>
+
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <Button type="primary" size="large" onClick={handleSuggestedMeals}>View Suggested Meals</Button>
       </div>
         </Card>
         <Col span={24}>
