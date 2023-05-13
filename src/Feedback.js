@@ -1,13 +1,23 @@
 import { Button, Modal, Form, Input } from 'antd';
 import { useState } from 'react';
-
+import axios from 'axios';
 
 export function Feedback () {
     const [modalVisible, setModalVisible] = useState(false);
   
     const handleFeedbackSubmit = (values) => {
       console.log(values); // replace with your desired behavior
-      setModalVisible(false);
+
+      // make axios call to submit feedback
+      axios.post('http://localhost:5000/api/submit-feedback', values)
+        .then(response => {
+          console.log('Feedback submitted successfully');
+          setModalVisible(false);
+        })
+        .catch(error => {
+          console.log('Error submitting feedback: ', error);
+          setModalVisible(false);
+        });
     };
   
     return (
@@ -35,4 +45,3 @@ export function Feedback () {
       </>
     );
   };
-    

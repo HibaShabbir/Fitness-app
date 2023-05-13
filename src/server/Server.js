@@ -55,6 +55,15 @@ const userSchema = new mongoose.Schema({
 // Create Mongoose model for user data
 const User = mongoose.model('User', userSchema);
 
+// Define Mongoose schema for feedback
+const feedbackSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  feedback: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now }
+});
+// Create Mongoose model for feedback
+const Feedback = mongoose.model('Feedback', feedbackSchema);
+
 // Define server endpoint for creating a new user
 app.post('/api/signup', async (req, res) => {
   // Extract user data from request body
@@ -215,5 +224,22 @@ app.get('/api/user/profile', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+app.post('/api/submit-feedback', async (req, res) => {
+  try {
+      const feedback = new Feedback({
+      user: currSession._id,
+      feedback: req.body.feedback
+    });
+    console.log(feedback);
+    await feedback.save();
+    res.status(201).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 // Start server listening on port 5000
 app.listen(5000, () => console.log('Server started listening on port 5000'));
