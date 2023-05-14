@@ -46,7 +46,7 @@ export function NavBar(props) {
 const handleLogout = async () => {
   try {
     // Send POST request to server endpoint for logging out
-    await axios.post('/api/logout');
+    await axios.post('http://localhost:5000/api/logout');
 
     // Update localStorage and state when user logs out
     localStorage.setItem('isLoggedIn', 'false');
