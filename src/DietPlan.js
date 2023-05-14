@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Button, Modal, Form, Input } from "antd";
+import { Table, Button, Modal, Form, Input,Row , Col } from "antd";
 import { FaStar } from "react-icons/fa";
 
 const weeklyDietPlans = {
@@ -97,6 +97,11 @@ export function DietPlan() {
         <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("muscleGain")}>Muscle Gain</Button>
       </div>
       <br></br>
+      <div style={{ display: 'flex',  alignItems:"center"}}>
+        <h2>Diet Plan for {dietPlan}</h2>
+        <Button style={{margin: "50px"}}>Follow {dietPlan} </Button>
+      </div>
+      
       <Table columns={columns} dataSource={data} pagination={false} />
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <Button type="primary" onClick={handleReviewClick}>

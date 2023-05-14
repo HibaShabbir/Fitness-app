@@ -64,6 +64,63 @@ const feedbackSchema = new mongoose.Schema({
 // Create Mongoose model for feedback
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 
+
+const dietPlanSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  monday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  },
+  tuesday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  },
+  wednesday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  },
+  thursday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  },
+  friday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  },
+  saturday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  },
+  sunday: {
+    breakfast: String,
+    snack1: String,
+    lunch: String,
+    snack2: String,
+    dinner: String
+  }
+});
+
+const DietPlan = mongoose.model('DietPlan', dietPlanSchema);
+
+
 // Define server endpoint for creating a new user
 app.post('/api/signup', async (req, res) => {
   // Extract user data from request body
@@ -240,6 +297,59 @@ app.post('/api/submit-feedback', async (req, res) => {
   }
 });
 
+// define a route for handling POST requests to add a new diet plan
+app.post('/api/add-diet-plan', (req, res) => {
+  const dietPlan = new DietPlan({
+    name: req.body.Name,
+    monday: req.body.Monday,
+    tuesday: req.body.Tuesday,
+    wednesday: req.body.Wednesday,
+    thursday: req.body.Thursday,
+    friday: req.body.Friday,
+    saturday: req.body.Saturday,
+    sunday: req.body.Sunday
+  });
 
+  dietPlan.save()
+    .then(savedPlan => {
+      console.log('New diet plan saved:');
+      res.status(201).json({ message: 'Diet plan saved successfully' });
+    })
+    .catch(error => {
+      console.error('Error saving diet plan:', error);
+      res.status(500).json({ message: 'Error saving diet plan' });
+    });
+});
+
+app.get('/api/get-diet-plans', async (req, res) => {
+  try {
+    const dietPlans = await DietPlan.find({}); // retrieve only the Name field
+    console.log(dietPlans);
+    res.status(200).send(dietPlans);
+  } catch (err) {
+    console.error('Error retrieving diet plans:', err);
+    res.status(500).send({ message: 'Error retrieving diet plans' });
+  }
+});
+
+// define the route to delete a diet plan by name
+app.delete('/api/delete-diet-plan/:name', async (req, res) => {
+  const name = req.params.name;
+  console.log(name);
+  try {
+    // find the diet plan with the given name
+  
+
+    // remove the diet plan from the database
+    const result = await DietPlan.findOneAndDelete({ name });
+    console.log(result);
+    // return a success message
+    return res.status(200).json({ message: 'Diet plan deleted successfully' });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while deleting the diet plan' });
+  }
+});
 // Start server listening on port 5000
 app.listen(5000, () => console.log('Server started listening on port 5000'));
