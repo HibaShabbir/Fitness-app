@@ -76,9 +76,7 @@ const handleLogout = async () => {
           <Menu.Item key="2" icon={<InfoCircleOutlined />}>
             <Link to="/about">About</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<PhoneOutlined />}>
-            <Link to="/contact">Contact</Link>
-          </Menu.Item>
+         
           <Menu.Item>
           <Button onClick={theme.handleClick}>
               Change Theme to {theme.isDarkMode ? "Light" : "Dark"}
