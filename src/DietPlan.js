@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Table, Button, Modal, Form, Input,Row , Col } from "antd";
 import { FaStar } from "react-icons/fa";
 
@@ -50,12 +51,29 @@ const weeklyDietPlans = {
   ],
 };
 
+
+
 export function DietPlan() {
   const [dietPlan, setDietPlan] = useState("cardiac");
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
   const [form] = Form.useForm(); // Create a form instance
+  const [currentDietPlan, setCurrentDietPlan] = useState(null);
+  const [dietplanDataSource, setDietplanDataSource] = useState([]);
 
+  useEffect(() => {
+    const fetchDietPlans = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/get-diet-plans');
+        const data = response.data;
+        setDietplanDataSource(data);
+      } catch (error) {
+        console.error('Error fetching diet plans:', error);
+      }
+    };
+
+    fetchDietPlans();
+  }, []);
   const columns = [
     { title: "", dataIndex: 0, key: 0 },
     { title: "Breakfast", dataIndex: 1, key: 1 },
@@ -84,32 +102,50 @@ export function DietPlan() {
   };
 
   return (
-    <div style={{width :"96vw" , height:"100vh" }}>
+    <div style={{width :"96vw" , height:"fit-content", minHeight:"100vh" }}>
       <div>
         <div className="logo">
           <h2>DIET PLAN</h2>
         </div>
         <br></br>
-        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("cardiac")}>Cardiac</Button> &nbsp;&nbsp;
-        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("gastritis")}>Gastritis</Button> &nbsp;&nbsp;
-        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("weightLoss")}>Weight Loss</Button>  &nbsp;&nbsp;
-        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("diabetes")}>Diabetes</Button>  &nbsp;&nbsp;
-        <Button style={{height:"60px", width:"250px"}} type="primary" size="large" onClick={() => handlePlanChange("muscleGain")}>Muscle Gain</Button>
       </div>
       <br></br>
-      <div style={{ display: 'flex',  alignItems:"center"}}>
-        <h2>Diet Plan for {dietPlan}</h2>
-        <Button style={{margin: "50px"}}>Follow {dietPlan} </Button>
-      </div>
-      
-      <Table columns={columns} dataSource={data} pagination={false} />
+  
+      <div>
+      <Row gutter={[16, 16]}>
+        {dietplanDataSource.map(plan => (
+          <Col key={plan._id} xs={24} md={8}>
+            <div style={{ padding: '16px', border: '1px solid #e8e8e8' }}>
+              <h2>{plan.name}</h2>
+              <Button type="primary" onClick={() => setCurrentDietPlan(plan)}>
+                View Diet Plan
+              </Button>
+            </div>
+          </Col>
+        ))}
+      </Row>
+    </div>
+
+    {currentDietPlan && (
+  <>
+    <h2>{currentDietPlan.name}</h2>
+    <Table dataSource={Object.entries(currentDietPlan).filter(([key, value]) => key !== "_id" && key !== "name" && key !== "__v").map(([day, meals]) => ({day: day.charAt(0).toUpperCase() + day.slice(1), ...meals}))} pagination={false}>
+      <Table.Column title="Day" dataIndex="day" key="day" />
+      <Table.Column title="Breakfast" dataIndex="breakfast" key="breakfast" />
+      <Table.Column title="Snack 1" dataIndex="snack1" key="snack1" />
+      <Table.Column title="Lunch" dataIndex="lunch" key="lunch" />
+      <Table.Column title="Snack 2" dataIndex="snack2" key="snack2" />
+      <Table.Column title="Dinner" dataIndex="dinner" key="dinner" />
+    </Table>
+  </>
+)}
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <Button type="primary" onClick={handleReviewClick}>
           <i className="fa fa-thumbs-up" aria-hidden="true" color="white" size="15"></i>
           &nbsp;&nbsp;&nbsp;&nbsp;Give Review
         </Button>
       </div>
-      
+     
       <Modal
         title="Diet Plan Review"
         visible={modalVisible}

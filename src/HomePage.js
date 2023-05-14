@@ -70,9 +70,9 @@ export function HomePage (){
             <Col xs={24} sm={12} lg={8}>
               <Card hoverable onClick={handleAnalyzeDataClick}>
                 <BarChartOutlined style={{ fontSize: '64px', color: '#1890ff' }} />
-                <Title level={3}>Analyze your data</Title>
+                <Title level={3}>Analyze your Sleep Quality</Title>
                 <Paragraph>
-                  Get insights into your performance and see how you're improving over time.
+                  Get insights into your sleep and see how well are you sleeping over time.
                 </Paragraph>
               </Card>
             </Col>

@@ -25,7 +25,7 @@ export function Personal_Info(){
   const fetchUserData = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/login-info`,  { withCredentials: true });
-      console.log(response.data.user);
+      console.log("useEffect "+response.data.user);
       setUserData(response.data.user);
     } catch (error) {
       console.error(error);
@@ -36,12 +36,24 @@ export function Personal_Info(){
     fetchUserData();
   }, []);
 
-  const handleActivity = (points) => {
-    setUserData({
-      ...userData,
-      points: userData.points + points,
+  const handleActivity = (activity) => {
+    var points = activity.points;
+    console.log(points);
+    var updatedPoints=userData.points +points;
+    console.log("update points " + updatedPoints);
+    axios.post('http://localhost:5000/updateUserPoints', { points: updatedPoints })
+    .then(response => {
+      console.log(response.data);
+      setUserData({
+        ...userData,
+        points: updatedPoints
+      });
+      message.success('Activity recorded successfully');
+    })
+    .catch(error => {
+      console.error(error);
+      message.error('Failed to record activity');
     });
-    message.success('Activity recorded successfully');
   };
 
 
@@ -213,7 +225,8 @@ export function Personal_Info(){
           {activityData.map((activity) => (
             <div className="activity-item" key={activity.label}>
               <p>{activity.label}</p>
-              <Button type="primary" onClick={() => handleActivity(activity.points)}>
+              <p>points : {activity.points}</p>
+              <Button type="primary" onClick={() => handleActivity(activity)}>
                 Add
               </Button>
             </div>

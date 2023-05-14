@@ -49,11 +49,34 @@ const userSchema = new mongoose.Schema({
   weight: { type: Number, required: true },
   disease: { type: String },
   food: { type: String },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' }
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  points:{ type: Number,  default: '0' },
+  waterTracking: [{ type: mongoose.Schema.Types.ObjectId, ref: 'WaterTracking' }],
+  sleepTracking: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SleepTracking' }]
+
 });
 
 // Create Mongoose model for user data
 const User = mongoose.model('User', userSchema);
+
+const waterTrackingSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  consumed: { type: Number, required: true },
+  date: { type: Date, default: Date.now }
+});
+const WaterTracking = mongoose.model('WaterTracking', waterTrackingSchema);
+
+
+//create sleep tracking schema
+const sleepTrackingSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  hoursOfSleep: { type: Number, required: true },
+  startTime: { type: String, required: true },
+  quality: { type: Number, required: true },
+}, { timestamps: true });
+
+const SleepTracking = mongoose.model('SleepTracking', sleepTrackingSchema);
+
 
 // Define Mongoose schema for feedback
 const feedbackSchema = new mongoose.Schema({
@@ -183,12 +206,14 @@ app.post('/api/login', async (req, res) => {
 
 
 // Define endpoint for checking user session
-app.get('/api/login-info', (req, res) => {
+app.get('/api/login-info', async (req, res) => {
   const sessionID = req.cookies.sessionID;
   //console.log("sessionId = "+sessionID);
   //console.log("req.session = " + currSession);
   //(req.sessionID === sessionID && req.session.user) {
-    const user = currSession;
+    
+    const email = currSession.email;
+    const user = await User.findOne({ email });
     const isAdmin = user.role === 'admin'; // 'role' property in your user object that indicates whether the user is an admin
     return res.send({ success: true, isAdmin, user });
   
@@ -282,6 +307,25 @@ app.get('/api/user/profile', async (req, res) => {
   }
 });
 
+app.post('/updateUserPoints', async (req, res) => {
+  const email = currSession.email; // Get the user's email from the request object
+  const points = req.body.points; // Get the new number of points from the request body
+
+  try {
+    // Find the user by email and update the points field
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      { $set: { points: points } },
+      { new: true, overwrite: false }
+    );
+
+    res.status(200).json({ message: 'Points updated successfully', user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to update points' });
+  }
+});
+
 app.post('/api/submit-feedback', async (req, res) => {
   try {
       const feedback = new Feedback({
@@ -351,5 +395,109 @@ app.delete('/api/delete-diet-plan/:name', async (req, res) => {
     return res.status(500).json({ error: 'An error occurred while deleting the diet plan' });
   }
 });
+app.post('/api/add-water-record', async (req, res) => {
+  try {
+    // Find the user by email
+    const email = currSession.email;
+    const user = await User.findOne({ email });
+
+    // Create a new water tracking entry
+    const waterTracking = new WaterTracking({
+      email: email,
+      consumed: req.body.consumed, // Set the consumed amount from the request body
+    });
+
+    // Save the water tracking entry to the database
+    await waterTracking.save();
+
+    // Add the new water tracking entry to the user's waterTracking array
+    user.waterTracking.push(waterTracking);
+    await user.save();
+
+    // Send a response with the new water tracking entry
+    res.status(200).json(waterTracking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+app.get('/api/get-water-tracking', async (req, res) => {
+  try {
+    // Find the user by email
+    const email = currSession.email;
+    const user = await User.findOne({ email }).populate('waterTracking');
+
+    // Return the water tracking entries for the user
+    res.status(200).json(user.waterTracking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.put('/api/update-water-record', async (req, res) => {
+  // Find the user by email
+  const email = currSession.email;
+  const user = await User.findOne({ email }).populate('waterTracking');
+
+  // Find the water tracking record for today's date
+  const today = new Date().setHours(0, 0, 0, 0);
+  let waterRecord = user.waterTracking.find(
+    (record) => new Date(record.date).setHours(0, 0, 0, 0) === today
+  );
+
+  if (!waterRecord) {
+    // Create a new water tracking entry
+    waterRecord = new WaterTracking({
+      user: user._id,
+      consumed: req.body.consumed, // Set the consumed amount
+    });
+
+    // Save the water tracking entry to the database
+    await waterRecord.save();
+
+    // Add the new water tracking entry to the user's waterTracking array
+    user.waterTracking.push(waterRecord._id);
+    await user.save();
+
+    return res.send(waterRecord);
+  }
+
+  // Update the consumed amount of the water tracking record
+  console.log(waterRecord);
+  console.log("exst "+waterRecord.consumed);
+  console.log("new" + waterRecord.consumed + req.body.consumed);
+  waterRecord.consumed = waterRecord.consumed + req.body.consumed;
+
+  // Save the updated water tracking record to the database
+  await waterRecord.save();
+
+  res.send(waterRecord);
+});
+
+app.post('/api/add-sleep-record', async (req, res) => {
+  const email = currSession.email;
+
+  try {
+    const user = await User.findOne({ email }).populate('sleepTracking');
+    const { hoursOfSleep, startTime, quality } = req.body;
+    const sleep = new SleepTracking({ user, hoursOfSleep, startTime, quality });
+    console.log(sleep);
+    const sleepData = await sleep.save();
+    console.log('Sleep tracking data saved to database:', sleepData);
+
+    // Push the sleepData _id to the sleepTracking array of the corresponding user
+    user.sleepTracking.push(sleepData._id);
+    await user.save();
+    
+    return res.status(200).send(sleepData);
+  } catch (error) {
+    console.log('Error saving sleep tracking data to database:', error);
+    return res.status(500).send('Error saving sleep tracking data to database');
+  }
+});
+
 // Start server listening on port 5000
 app.listen(5000, () => console.log('Server started listening on port 5000'));

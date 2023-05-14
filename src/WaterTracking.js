@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Layout, Input, Button, Progress } from 'antd';
+import { Layout, Input, Button,  message, Progress } from 'antd';
+import axios from 'axios';
 
 const { Content } = Layout;
 
 const WaterTracking = () => {
-  const [goal, setGoal] = useState(64); // ounces
+  const [goal, setGoal] = useState(96); // ounces
   const [consumed, setConsumed] = useState(0); // ounces
 
   const handleChange = (value) => {
@@ -15,11 +16,37 @@ const WaterTracking = () => {
   };
   const handleSubmit = (value) => {
     //some logic 
+    // Get all water tracking records for a user
+    axios.get('http://localhost:5000/api/get-water-tracking')
+   .then(response => {
+    const waterTrackingArray = response.data;
+  
+    // Create a new water tracking record for today's date
+    axios.post('http://localhost:5000/api/add-water-record', { consumed })
+      .then(response => {
+        console.log(response.data.message);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
+  
+
     setConsumed(0);
-    alert('You have submitted for the day ');
+    
+    
   };
   const handleAdd = () => {
+    if(consumed===96){
+      message.success("Good job you have achieved your goal of 96 oz!");
+    }
     setConsumed(consumed + 8);
+   
   };
 
   return (
@@ -48,13 +75,14 @@ const WaterTracking = () => {
           <Button onClick={handleReset}>
             Reset
           </Button>
-
-          <Button type="primary" onClick={handleSubmit}>
-            Submit
-          </Button>
           
         </div>
-       
+       <div style={{display: 'flex', flexDirection:"column",justifyContent: 'center',alignItems:"center" }}>
+       <h2>Submit at the end of the day </h2>
+       <Button type="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </div>
       </Content>
     </Layout>
   );
