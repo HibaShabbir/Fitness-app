@@ -466,9 +466,6 @@ app.put('/api/update-water-record', async (req, res) => {
   }
 
   // Update the consumed amount of the water tracking record
-  console.log(waterRecord);
-  console.log("exst "+waterRecord.consumed);
-  console.log("new" + waterRecord.consumed + req.body.consumed);
   waterRecord.consumed = waterRecord.consumed + req.body.consumed;
 
   // Save the updated water tracking record to the database
@@ -486,12 +483,12 @@ app.post('/api/add-sleep-record', async (req, res) => {
     const sleep = new SleepTracking({ user, hoursOfSleep, startTime, quality });
     console.log(sleep);
     const sleepData = await sleep.save();
-    console.log('Sleep tracking data saved to database:', sleepData);
+    //console.log('Sleep tracking data saved to database:', sleepData);
 
     // Push the sleepData _id to the sleepTracking array of the corresponding user
     user.sleepTracking.push(sleepData._id);
     await user.save();
-    
+
     return res.status(200).send(sleepData);
   } catch (error) {
     console.log('Error saving sleep tracking data to database:', error);
@@ -499,5 +496,37 @@ app.post('/api/add-sleep-record', async (req, res) => {
   }
 });
 
+app.get('/api/sleepTracking', async (req, res) => {
+  try {
+    // Extract the user ID from the request parameters
+    const email = currSession.email;
+    const user = await User.findOne({ email })
+    const userId = user._id;
+    console.log("user id"+userId);
+    // Fetch all sleep tracking records for the user
+    const sleepRecords = await SleepTracking.find({ user: userId });
+    console.log(sleepRecords);
+    // send the sleep tracking data as the response
+    res.json(sleepRecords);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
+app.get('/api/waterTracking', async (req, res) => {
+  try {
+    const email = currSession.email;
+    // find all water records for the user
+    const waterRecords = await WaterTracking.find({ email });
+
+    console.log(waterRecords);
+    // return the water records to the client
+    res.json(waterRecords);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
 // Start server listening on port 5000
 app.listen(5000, () => console.log('Server started listening on port 5000'));

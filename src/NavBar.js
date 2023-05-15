@@ -15,7 +15,9 @@ import {Personal_Info} from './Personal_Info';
 import Videos from './Videos';
 import {DietPlan} from'./DietPlan.js';
 import { SignUp } from './SignUp';
+import ProgressReport from './ProgressReportTrack';
 import axios from 'axios';
+
 
 export function NavBar(props) {
   const { theme } = props;
@@ -91,6 +93,7 @@ const handleLogout = async () => {
         </Menu>
         <Routes>     
           <Route path ="/workout-plan" element={<SuggestedWorkoutPlans/>}/>
+          <Route path ="/view-progress" element={<ProgressReport/>}/>
           <Route path ="/view-profile" element={<Personal_Info/>}/>
           <Route path ="/nutrition-plan" element={<DietPlan/>}/>
           <Route path ="/suggested-meals" element={<SuggestedMeals/>}/>

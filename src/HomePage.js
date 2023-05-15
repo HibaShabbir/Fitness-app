@@ -16,6 +16,9 @@ export function HomePage (){
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const handleProgressReport = () => {
+    navigate('/view-progress'); 
+  };
   const handleAnalyzeDataClick = () => {
     navigate('/sleep-tracking'); // Navigate to the SleepTracking page when the card is clicked
   };
@@ -59,7 +62,7 @@ export function HomePage (){
         <Content style={{ padding: '50px' }}>
           <Row gutter={[32, 32]} justify="center" align="middle">
             <Col xs={24} sm={12} lg={8}>
-              <Card hoverable>
+              <Card hoverable onClick={handleProgressReport}>
                 <HeartOutlined style={{ fontSize: '64px' , color:'#1890ff' }} />
                 <Title level={3}>Track your progress</Title>
                 <Paragraph>
