@@ -52,12 +52,21 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   points:{ type: Number,  default: '0' },
   waterTracking: [{ type: mongoose.Schema.Types.ObjectId, ref: 'WaterTracking' }],
-  sleepTracking: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SleepTracking' }]
+  sleepTracking: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SleepTracking' }],
+  workoutTracking: [{ type: mongoose.Schema.Types.ObjectId, ref: 'WorkoutTracking' }]
 
 });
 
 // Create Mongoose model for user data
 const User = mongoose.model('User', userSchema);
+
+const workoutTrackingSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  goal: { type: String, required: true },
+  daysCompleted: { type: Number, default: 0 },
+});
+
+const WorkoutTracking = mongoose.model('WorkoutTracking', workoutTrackingSchema);
 
 const waterTrackingSchema = new mongoose.Schema({
   email: { type: String, required: true },
@@ -66,6 +75,70 @@ const waterTrackingSchema = new mongoose.Schema({
 });
 const WaterTracking = mongoose.model('WaterTracking', waterTrackingSchema);
 
+// Save or update workout progress
+app.post('/api/workout/progress', async (req, res) => {
+  try {
+
+    const email = currSession.email;
+    const { goal, daysCompleted } = req.body;
+
+    // Find the user
+    const user = await User.findOne({email});
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const userId= user._id;
+    console.log("days completed" + daysCompleted);
+    // Check if workout tracking record exists for the specific goal
+    let workoutTracking = await WorkoutTracking.findOne({ user: userId, goal });
+
+    if (workoutTracking) {
+      // Update the existing record
+      workoutTracking.daysCompleted = daysCompleted;
+    } else {
+      // Create a new record
+      workoutTracking = new WorkoutTracking({ user : userId, goal, daysCompleted });
+      user.workoutTracking.push(workoutTracking); // Save the workout record in the user's workoutTracking array
+    }
+
+    // Save the workout tracking record
+    await workoutTracking.save();
+    await user.save(); // Save the user
+
+    res.status(200).json({ message: 'Workout progress saved successfully' });
+  } catch (error) {
+    console.error('Error saving workout progress', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/api/user/workoutTracking', async (req, res) => {
+  try {
+    console.log("get workout req");
+    const email = currSession.email;
+    // Find the user
+    const user = await User.findOne({email}).populate('workoutTracking');;
+    console.log("user mail"+user.email);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const userId= user._id;
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Extract workoutTracking records from the user
+    const workoutTrackingRecords = user.workoutTracking.map((workoutTracking) => ({
+      daysCompleted: workoutTracking.daysCompleted,
+      goal: workoutTracking.goal,
+    }));
+    console.log(workoutTrackingRecords);
+    res.status(200).json(workoutTrackingRecords);
+  } catch (error) {
+    console.error('Error retrieving workoutTracking records', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 //create sleep tracking schema
 const sleepTrackingSchema = new mongoose.Schema({

@@ -72,7 +72,22 @@ const [sleepData, setSleepData] = useState([]);
     }
     fetchSleepData();
   }, [/* dependencies for fetching sleep data */]);
+  
+  const [workoutTracking, setWorkoutTracking] = useState([]);
 
+  useEffect(() => {
+    const fetchWorkoutTracking = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/user/workoutTracking`);
+        setWorkoutTracking(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching workoutTracking records:', error);
+      }
+    };
+
+    fetchWorkoutTracking();
+  }, []);
 // calculate the average sleep quality for the past 7 days
 const avgSleepQuality = (sleepQuality.slice(-7).reduce((a, b) => a + b, 0) / 7).toFixed(2);
 
@@ -171,33 +186,27 @@ const avgSleepQuality = (sleepQuality.slice(-7).reduce((a, b) => a + b, 0) / 7).
         </div>
         </TabPane>
     
-        <TabPane tab="Calories Burnt" key="3">
-          <h2>Calories Burnt</h2>
-          <Progress
-            type="circle"
-            percent={caloriesBurnt}
-            format={() => `${caloriesBurnt} cal`}
-            />
-            <br />
-            <br />
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Progress type="dashboard" percent={75} width={100} />
-              <div style={{ marginLeft: "24px" }}>
-                <h3>Running</h3>
-                <p>Calories Burnt: 400 cal</p>
-                <p>Duration: 30 min</p>
+        <TabPane tab="Exercise Tracking" key="3">
+        <div>
+          <h2>Workout Tracking List</h2>
+          {workoutTracking.map((record,index) => (
+            <div key={record.goal} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', borderRadius: '10px', padding: '20px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                <div style={{ marginRight: '24px' }}>
+                  <Progress type="dashboard" percent={(record.daysCompleted / 5) * 100} width={200} strokeColor={colors[index]} />
+                </div>
+                <div>
+                  <h3 style={{ marginBottom: '8px' }}>{record.goal}</h3>
+                  <p style={{ fontSize: '14px', color: '#888' }}>Total Days: 5</p>
+                  <p style={{ fontSize: '16px', fontWeight: 'bold' }}>Days Completed: {record.daysCompleted}</p>
+                </div>
               </div>
             </div>
-            <br />
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Progress type="dashboard" percent={50} width={100} />
-              <div style={{ marginLeft: "24px" }}>
-                <h3>Weightlifting</h3>
-                <p>Calories Burnt: 200 cal</p>
-                <p>Duration: 45 min</p>
-              </div>
-            </div>
-          </TabPane>
+          ))}
+        </div>
+      </TabPane>
+
+
         </Tabs>
       </div>
     );
