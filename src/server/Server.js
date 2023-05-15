@@ -1,3 +1,5 @@
+
+
 // Import required packages
 const express = require('express');
 const mongoose = require('mongoose');
@@ -5,6 +7,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const cookieParser = require('cookie-parser'); // add cookie-parser
+const nodemailer = require('nodemailer');
 var currSession;
 // Create Express app
 console.log('Starting app...');
@@ -635,5 +638,40 @@ app.get('/api/waterTracking', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// POST endpoint to handle sending reminder email
+app.post('/api/send-reminder-email', (req, res) => {
+  // Set up your email transport (SMTP)
+  const transporter = nodemailer.createTransport({
+    port: 465,
+    host: 'smtp.gmail.com',
+    auth: {
+      user: 'rabiashakil786@gmail.com',
+      pass: 'vzehenfkizkhpnrj',
+    },
+    secure: true,
+  });
+
+  const email = currSession.email;
+
+  const mailOptions = {
+    from: 'rabiashakil786@gmail.com',
+    to: email,
+    subject: 'Drink Water Reminder',
+    text: 'Hey! Don\'t forget to drink water regularly to stay hydrated.',
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending reminder email:', error);
+      res.status(500).send('Failed to send reminder email.');
+    } else {
+      console.log('Reminder email sent:', info.response);
+      res.status(200).send('Reminder email sent successfully!');
+    }
+  });
+});
 // Start server listening on port 5000
 app.listen(5000, () => console.log('Server started listening on port 5000'));
+
+ 
