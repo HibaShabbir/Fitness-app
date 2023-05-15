@@ -143,6 +143,40 @@ const dietPlanSchema = new mongoose.Schema({
 
 const DietPlan = mongoose.model('DietPlan', dietPlanSchema);
 
+const reviewSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  rating: { type: Number, required: true },
+  review: { type: String, required: true },
+  dietPlanName: { type: String, required: true },
+  dietPlan: { type: mongoose.Schema.Types.ObjectId, ref: 'DietPlan' }
+});
+
+const Review = mongoose.model('Review', reviewSchema);
+
+app.post('/api/submit-review', async (req, res) => {
+  try {
+    const {  rating, review, dietPlanName, dietPlan } = req.body;
+    const email=currSession.email;
+    // Create a new Review object with the submitted data
+    const newReview = new Review({
+      email,
+      rating,
+      review,
+      dietPlanName,
+      dietPlan,
+      
+    });
+
+    // Save the new review to the database
+    const savedReview = await newReview.save();
+
+    // Return the saved review as a response
+    res.status(201).json(savedReview);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to submit review' });
+  }
+});
 
 // Define server endpoint for creating a new user
 app.post('/api/signup', async (req, res) => {

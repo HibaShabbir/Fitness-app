@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, Button, Modal, Form, Input,Row , Col } from "antd";
+import { Table, Button, Modal, Form, Input,Row , Col  , message} from "antd";
 import { FaStar } from "react-icons/fa";
 
 const weeklyDietPlans = {
@@ -98,6 +98,25 @@ export function DietPlan() {
   const handleReviewSubmit = (values) => {
     console.log("Review submitted:", values);
     // Handle the review submission here
+    console.log(values); // replace with your desired behavior
+    const payload = {
+      ...values,
+      rating:rating,
+      dietPlanName: currentDietPlan.name,
+      dietPlan: currentDietPlan._id
+    };
+    console.log(payload);
+    
+      // make axios call to submit feedback
+      axios.post('http://localhost:5000/api/submit-review', payload)
+        .then(response => {
+          message.success('Review submitted successfully');
+          
+        })
+        .catch(error => {
+          console.log('Error submitting review: ', error);
+          setModalVisible(false);
+        });
     setModalVisible(false);
   };
 
@@ -158,7 +177,7 @@ export function DietPlan() {
             label="Your review"
             name="review"
           >
-            <Input.TextArea placeholder="Enter your review here" />
+            <Input.TextArea name="comment" placeholder="Enter your review here" />
           </Form.Item>
 
           <Form.Item>
