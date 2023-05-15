@@ -14,6 +14,28 @@ const WaterTracking = () => {
   const handleReset = () => {
     setConsumed(0);
   };
+
+  
+  
+  const handleReminderClick = () => {
+    fetch('http://localhost:5000/api/send-reminder-email', {
+      method: 'POST',
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Reminder email sent successfully!');
+        
+        } else {
+          console.error('Failed to send reminder email.');
+         
+        }
+      })
+      .catch(error => {
+        console.error('Error sending reminder email:', error);
+        // Handle the error or display a message to the user
+      });
+  };
+
   const handleSubmit = (value) => {
     //some logic 
     // Get all water tracking records for a user
@@ -48,6 +70,7 @@ const WaterTracking = () => {
     setConsumed(consumed + 8);
    
   };
+ 
 
   return (
     <Layout>
@@ -81,6 +104,10 @@ const WaterTracking = () => {
        <h2>Submit at the end of the day </h2>
        <Button type="primary" onClick={handleSubmit}>
             Submit
+          </Button>
+          <br></br>
+          <Button type="primary" onClick={handleReminderClick}>
+            Give Reminder
           </Button>
         </div>
       </Content>
