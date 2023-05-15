@@ -11,11 +11,7 @@ body, .nutritionist-list, .ant-list-item-meta-title, .ant-list-item-meta-descrip
 
   }
   
-  /* Set the background color to black for the body */
-  body {
-    background-color: #000;
-  }
-  
+ 
   /* Set the background color to dark gray and text color to white for the nutritionist list */
   .nutritionist-list {
     background-color: #000;
@@ -64,54 +60,54 @@ body, .nutritionist-list, .ant-list-item-meta-title, .ant-list-item-meta-descrip
   }
 
   /* Style the select input and arrow with a white background, black text, and a border */
-  .ant-select {
-    background-color: #fff;
+  /*.ant-select {
+   
     border: 1px solid #ccc;
     color: black;
   }
   
   .ant-select-arrow {
     color: white;
-  }
+  }*/
   
   /* Style the input field with a white background, black text, and a border */
-  .ant-input {
-    background-color: #fff;
+  /*.ant-input {
+   
     border: 1px solid #ccc;
     color: white;
   }
-  
+  */
   /* Style the input addon with a white background, black text, and a border */
-  .ant-input-group-addon {
-    background-color: #fff;
+  /*.ant-input-group-addon {
+    
     border: 1px solid #ccc;
     color: black;
-  }
+  }*/
   
   /* Style the addon button with a black background, white text, and a border */
-  .ant-input-group-addon button {
+  /*.ant-input-group-addon button {
     background-color: #222;
     border: 1px solid #fff;
     color: #fff;
-  }
+  }*/
   
   /* Style the list item with a black background, white text, and a blue border */
-  .ant-list-item {
-    background-color: #faf6f6;
+  /*.ant-list-item {
+    
     color: #fff;
     margin-bottom: 30px;
     width: 950px;
     margin-left: 150px;
     border: 3px solid #1e90ff;
     border-radius: 8px;
-  }
+  }*/
   
   /* Set the text color to white for the list item title and description */
-  .ant-list-item-meta-title, .ant-list-item-meta-description {
+  /*.ant-list-item-meta-title, .ant-list-item-meta-description {
     color: #fff;
     width: 700px;
     margin-right: 200px;
-  }
+  }*/
 
   
   

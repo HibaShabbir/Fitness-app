@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, Avatar, Button, Input, Select } from 'antd';
+import { List, Avatar, Button, Input, Select , Card} from 'antd';
 import './Nutritionist.css'; // Import custom CSS styles
 
 const { Search } = Input;
@@ -11,7 +11,7 @@ const nutritionistsData = [
   { name: 'Mark Johnson', rating: 4.2, specialties: ['Digestive Health', 'Meal Planning'] },
 ];
 
-const Nutritionist = () => {
+export function Nutritionist (){
   const [nutritionists, setNutritionists] = useState(nutritionistsData);
   const [sortOrder, setSortOrder] = useState(null);
   const [searchValue, setSearchValue] = useState('');
@@ -69,7 +69,7 @@ const Nutritionist = () => {
   );
 
   return (
-    <div className="nutritionist-list">
+    <div className="nutritionist-list" style={{width :"96vw" , height:"fit-content", minHeight:"fit-content", paddingBottom:"60px" }}>
       <div className="nutritionist-list__header">
         <h1 className="nutritionist-list__title">BEST NUTRITIONISTS</h1>
        
@@ -105,11 +105,17 @@ const Nutritionist = () => {
           <Option value="Meal Planning">Meal Planning</Option>
           </Select>
           <br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+          <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginBottom:"20px" }}>
+          <Card style={{width :"90vw" , height:"fit-content" }}>
           <List
                itemLayout="horizontal"
                dataSource={nutritionists}
                renderItem={renderItem}
              />
+          </Card>
+          </div>
+          
+         
           
           </div>
           );

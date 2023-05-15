@@ -12,6 +12,12 @@ export function Sidebar()
     const handleViewProfile=()=>{
         navigate('/view-profile'); 
     }
+    const handleFindNutionists=()=>{
+        navigate('/view-nutrionists'); 
+    }
+    const handleHealthyRecipes=()=>{
+        navigate('/view-healthy-recipes'); 
+    }
     const [collapsed, setCollapsed] = useState(true);
     const toggleCollapsed = () => {
       setCollapsed(!collapsed);
@@ -27,12 +33,12 @@ export function Sidebar()
                     <Menu.Item key="1" icon={<UserOutlined />} onClick={handleViewProfile}>
                         My Profile
                     </Menu.Item>
-                    {/*<Menu.Item key="2" icon={<TeamOutlined />}>
-                        Option 2
+                    <Menu.Item key="2" icon={<TeamOutlined />} onClick={handleFindNutionists}>
+                        Find Nutritionist 
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />}>
-                        Option 3
-                    </Menu.Item>*/}
+                    <Menu.Item key="3" icon={<UploadOutlined />} onClick={handleHealthyRecipes}>
+                        Healthy Recipes
+                    </Menu.Item>
                     <Menu.Item key="2" icon={<MailOutlined />}>
                     <Feedback></Feedback>
                     </Menu.Item>

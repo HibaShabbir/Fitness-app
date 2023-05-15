@@ -21,7 +21,7 @@ const RecipeCard = ({ title, ingredients, instructions }) => {
   );
 };
 
-const HealthyRecipe = () => {
+export function HealthyRecipe () {
   const recipes = [
     {
       title: 'Avocado Salad',
@@ -93,7 +93,7 @@ const HealthyRecipe = () => {
 
   return (
     <div className="healthy-recipes-page">
-      <h1>Healthy Recipes</h1>
+      <h1 style={{textAlign : "center"}}>Healthy Recipes</h1>
       <Row gutter={16}>
         {recipes.map((recipe, index) => (
          <Col key={index} xs={24} sm={12} md={12} lg={6} xl={6}>
@@ -109,4 +109,3 @@ const HealthyRecipe = () => {
   );
 };
 
-export default HealthyRecipe;
