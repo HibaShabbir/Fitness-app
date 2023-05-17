@@ -95,7 +95,7 @@ const handleLogout = async () => {
           </Menu.Item>
         </Menu>
         <Routes>     
-        <Route path ="/"symptoms-checker element={<SymptomsCheckerPage/>}/>
+        <Route path ="/symptoms-checker" element={<SymptomsCheckerPage/>}/>
           <Route path ="/view-healthy-recipes" element={<HealthyRecipe/>}/>
           <Route path ="/view-nutrionists" element={<Nutritionist/>}/>
           <Route path ="/workout-plan" element={<SuggestedWorkoutPlans/>}/>
