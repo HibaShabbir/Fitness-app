@@ -1,5 +1,5 @@
 import { Menu, Layout } from 'antd';
-import { MenuOutlined ,TeamOutlined,UserOutlined, UploadOutlined, MailOutlined } from '@ant-design/icons';
+import { MenuOutlined ,TeamOutlined,UserOutlined, UploadOutlined, MailOutlined , AppleOutlined , MedicineBoxOutlined} from '@ant-design/icons';
 import { useState } from 'react';
 import { Feedback } from './Feedback';
 import { Review } from './Review';
@@ -11,6 +11,9 @@ export function Sidebar()
 
     const handleViewProfile=()=>{
         navigate('/view-profile'); 
+    }
+    const handleSymptomsChecker=()=>{
+        navigate('/symptoms-checker'); 
     }
     const handleFindNutionists=()=>{
         navigate('/view-nutrionists'); 
@@ -33,14 +36,18 @@ export function Sidebar()
                     <Menu.Item key="1" icon={<UserOutlined />} onClick={handleViewProfile}>
                         My Profile
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<TeamOutlined />} onClick={handleFindNutionists}>
-                        Find Nutritionist 
-                    </Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />} onClick={handleHealthyRecipes}>
+                    
+                    <Menu.Item key="2" icon={<AppleOutlined />} onClick={handleHealthyRecipes}>
                         Healthy Recipes
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<MailOutlined />}>
+                    <Menu.Item key="3" icon={<TeamOutlined />} onClick={handleFindNutionists}>
+                        Find Nutritionist 
+                    </Menu.Item>
+                    <Menu.Item key="4" icon={<MailOutlined />}>
                     <Feedback></Feedback>
+                    </Menu.Item>
+                    <Menu.Item key="5" icon={<MedicineBoxOutlined />} onClick={handleSymptomsChecker}>
+                    Symptoms Checker
                     </Menu.Item>
                     
                 </Menu>

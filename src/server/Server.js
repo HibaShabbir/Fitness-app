@@ -229,6 +229,52 @@ const reviewSchema = new mongoose.Schema({
 
 const Review = mongoose.model('Review', reviewSchema);
 
+// Create symptom schema and model
+const symptomSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  diagnosis: {
+    type: String,
+    required: true,
+  },
+});
+// Fetch symptoms
+app.get('/api/symptoms', async (req, res) => {
+  try {
+    const symptoms = await Symptom.find();
+    res.json(symptoms);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch symptoms' });
+  }
+});
+
+// Add symptom
+app.post('/api/symptoms', async (req, res) => {
+  try {
+    const { name, diagnosis } = req.body;
+    const newSymptom = new Symptom({ name, diagnosis });
+    await newSymptom.save();
+    res.status(201).json(newSymptom);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add symptom' });
+  }
+});
+
+// Delete symptom
+app.delete('/api/symptoms/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Symptom.findByIdAndDelete(id);
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete symptom' });
+  }
+});
+
+const Symptom = mongoose.model('Symptom', symptomSchema);
+
 app.post('/api/submit-review', async (req, res) => {
   try {
     const {  rating, review, dietPlanName, dietPlan } = req.body;

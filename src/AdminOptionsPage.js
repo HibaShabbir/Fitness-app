@@ -1,4 +1,4 @@
-import { Layout, Menu, Breadcrumb, Table, Popconfirm, Button} from 'antd';
+import { Layout, Menu, Breadcrumb, Table, Popconfirm, Button, message} from 'antd';
 import { Modal, Form, Input } from 'antd'
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
@@ -38,6 +38,78 @@ export function AdminOptionsPage(props) {
   const [dietplanDataSource, setDietplanDataSource] = useState([]);
   const [selectedMenuKey, setSelectedMenuKey] = useState('1');
   const [form] = Form.useForm();
+  const [symptomForm] = Form.useForm();
+  const [symptoms, setSymptoms] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleAddSymptomForm = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancelSymptomForm = () => {
+    setIsModalVisible(false);
+  };
+
+  useEffect(() => {
+    fetchSymptoms();
+  }, []);
+
+  const fetchSymptoms = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/symptoms');
+      setSymptoms(response.data);
+    } catch (error) {
+      console.error('Error fetching symptoms:', error);
+    }
+  };
+
+  const handleAddSymptom = async () => {
+   
+    try {
+      const values = await symptomForm.validateFields();
+      const { name, diagnosis } = values;
+      await axios.post('http://localhost:5000/api/symptoms', { name, diagnosis });
+      message.success('Symptom added successfully');
+      form.resetFields();
+      fetchSymptoms();
+    } catch (error) {
+      console.error('Error adding symptom:', error);
+      message.error('Failed to add symptom');
+    }
+  };
+
+  const handleDeleteSymptom = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/symptoms/${id}`);
+      message.success('Symptom deleted successfully');
+      fetchSymptoms();
+    } catch (error) {
+      console.error('Error deleting symptom:', error);
+      message.error('Failed to delete symptom');
+    }
+  };
+
+  const symptomsColumns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Diagnosis',
+      dataIndex: 'diagnosis',
+      key: 'diagnosis',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Button type="link" danger onClick={() => handleDeleteSymptom(record._id)}>
+          Delete
+        </Button>
+      ),
+    },
+  ];
 
   const handleAddDietPlan = () => {
     setVisible(true);
@@ -336,20 +408,51 @@ export function AdminOptionsPage(props) {
               selectedKeys={[selectedMenuKey]}
               onClick={handleMenuClick}
             >
-              <Menu.Item key="1">Workout Plans</Menu.Item>
+              <Menu.Item key="1">Symptoms Checker</Menu.Item>
               <Menu.Item key="2">Users</Menu.Item>
               <Menu.Item key="3">DietPlan</Menu.Item>
             </Menu>
             {selectedMenuKey === '1' && (
               <>
                 <div style={{ marginBottom: 16 }}>
-                  <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-                    Add Workout Plan
+                  <Button type="primary" icon={<PlusOutlined />} onClick={handleAddSymptomForm}>
+                    Add Symptom
                   </Button>
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={symptoms} columns={symptomsColumns} rowKey="_id" />
+                <Modal
+                title="Add Symptom"
+                visible={isModalVisible}
+                onCancel={handleCancelSymptomForm}
+                footer={null}
+              >
+                <Form layout="vertical" form={symptomForm}>
+                  {/* Form fields for symptom name and diagnosis */}
+                  <Form.Item
+                  label="Name"
+                  name="name"
+                  initialValue=""
+                  rules={[{ required: true, message: 'Please enter the symptom name' }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Diagnosis"
+                  name="diagnosis"
+                  initialValue=""
+                  rules={[{ required: true, message: 'Please enter the diagnosis' }]}
+                >
+                  <Input />
+                </Form.Item>
+
+                  <Button type="primary" onClick={handleAddSymptom}>
+                    Add
+                  </Button>
+                </Form>
+              </Modal>
               </>
             )}
+
             {selectedMenuKey === '2' && (
               <>
               <div style={{ marginBottom: 16 }}>
