@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import { List, Avatar, Button, Input, Select , Card} from 'antd';
+import React, { useState, useEffect } from 'react';
+import { List, Avatar, Input, Select } from 'antd';
+import axios from 'axios';
 import './Nutritionist.css'; // Import custom CSS styles
 
 const { Search } = Input;
 const { Option } = Select;
 
-const nutritionistsData = [
-  { name: 'John Doe', rating: 4.5, specialties: ['Weight Loss', 'Sports Nutrition'] },
-  { name: 'Jane Smith', rating: 4.8, specialties: ['Diabetes Management', 'Healthy Eating'] },
-  { name: 'Mark Johnson', rating: 4.2, specialties: ['Digestive Health', 'Meal Planning'] },
-];
-
-export function Nutritionist (){
-  const [nutritionists, setNutritionists] = useState(nutritionistsData);
+const Nutritionist = () => {
+  const [nutritionists, setNutritionists] = useState([]);
   const [sortOrder, setSortOrder] = useState(null);
   const [searchValue, setSearchValue] = useState('');
   const [filterValue, setFilterValue] = useState(null);
+
+  useEffect(() => {
+    fetchNutritionists();
+  }, []);
+
+  const fetchNutritionists = () => {
+    axios
+      .get('/nutritionists')
+      .then((response) => {
+        setNutritionists(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const sortNutritionists = (order) => {
     const sortedNutritionists = [...nutritionists].sort((a, b) => {
@@ -30,36 +40,15 @@ export function Nutritionist (){
   };
 
   const searchNutritionists = (value) => {
-    const filteredNutritionists = nutritionistsData.filter((nutritionist) => {
-      return nutritionist.name.toLowerCase().includes(value.toLowerCase()) || nutritionist.specialties.join(', ').toLowerCase().includes(value.toLowerCase());
-    });
-    setNutritionists(filteredNutritionists);
     setSearchValue(value);
   };
 
   const filterNutritionists = (value) => {
-    if (value === 'all') {
-      setNutritionists(nutritionistsData);
-      setFilterValue(null);
-    } else {
-      const filteredNutritionists = nutritionistsData.filter((nutritionist) => {
-        return nutritionist.rating >= Number(value);
-      });
-      setNutritionists(filteredNutritionists);
-      setFilterValue(value);
-    }
+    setFilterValue(value);
   };
 
   const renderItem = (nutritionist) => (
-    <List.Item
-      key={nutritionist.name}
-      actions={[
-        <Button type="primary" key="message">
-          Message
-        </Button>
-      ]}
-      extra={<img src="https://picsum.photos/100/100" alt={nutritionist.name} />}
-    >
+    <List.Item>
       <List.Item.Meta
         avatar={<Avatar src="https://picsum.photos/50/50" alt={nutritionist.name} />}
         title={<a href={`/${nutritionist.name}`}>{nutritionist.name}</a>}
@@ -68,57 +57,64 @@ export function Nutritionist (){
     </List.Item>
   );
 
+  const filteredNutritionists = nutritionists.filter((nutritionist) => {
+    const nameMatch = nutritionist.name.toLowerCase().includes(searchValue.toLowerCase());
+    const specialtyMatch = nutritionist.specialties.join(', ').toLowerCase().includes(searchValue.toLowerCase());
+    const filterMatch = filterValue === 'all' || nutritionist.specialties.includes(filterValue);
+    return (nameMatch || specialtyMatch) && filterMatch;
+  });
+
   return (
-    <div className="nutritionist-list" style={{width :"96vw" , height:"fit-content", minHeight:"fit-content", paddingBottom:"60px" }}>
+    <div className="nutritionist-list">
       <div className="nutritionist-list__header">
         <h1 className="nutritionist-list__title">BEST NUTRITIONISTS</h1>
-       
-        </div>
-          <label className='nut'>Search by Name or Speciality :</label>
-          <Search className="nutritionist-list__search"
-           placeholder="Search by name or specialty"
-          allowClear
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          style={{ width: 300}}
-          />
+      </div>
 
-        <label className='nut'>Sort by rating :</label>
-        <Select
-          className="nutritionist-list__sort"
-          placeholder="Sort by rating"
-          size="large"
-          onChange={(value) => sortNutritionists(value)}
-          >
-          <Option value="asc">Lowest to highest</Option>
-          <Option value="desc">Highest to lowest</Option>
-          </Select>
-       
-          <label className='nut'>Filter by specialty :</label>
-          <Select className="nutritionist-list__filter" defaultValue="all" style={{ width: 200 }} onChange={filterNutritionists}>
-          <Option value="all">All</Option>
-          <Option value="Weight Loss">Weight Loss</Option>
-          <Option value="Sports Nutrition">Sports Nutrition</Option>
-          <Option value="Diabetes Management">Diabetes Management</Option>
-          <Option value="Healthy Eating">Healthy Eating</Option>
-          <Option value="Digestive Health">Digestive Health</Option>
-          <Option value="Meal Planning">Meal Planning</Option>
-          </Select>
-          <br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-          <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginBottom:"20px" }}>
-          <Card style={{width :"90vw" , height:"fit-content" }}>
+      <label className="nut">Search by Name or Speciality :</label>
+      <Search
+        className="nutritionist-list__search"
+        allowClear
+        value={searchValue}
+        onChange={(e) => searchNutritionists(e.target.value)}
+        style={{ width: 300, color: 'black' }}
+        type="text"
+      />
+
+      <label className="nut">Sort by rating :</label>
+      <Select
+        className="nutritionist-list__sort"
+        placeholder="Sort by rating"
+        size="large"
+        onChange={(value) => sortNutritionists(value)}
+      >
+        <Option value="asc">Lowest to highest</Option>
+        <Option value="desc">Highest to lowest</Option>
+      </Select>
+
+      <label className="nut">Filter by specialty :</label>
+      <Select
+        className="nutritionist-list__filter"
+        defaultValue="all"
+        style={{width: 200 }}
+        onChange={filterNutritionists}
+        >
+        <Option value="all">All</Option>
+        <Option value="Weight Loss">Weight Loss</Option>
+        <Option value="Sports Nutrition">Sports Nutrition</Option>
+        <Option value="Diabetes Management">Diabetes Management</Option>
+        <Option value="Healthy Eating">Healthy Eating</Option>
+        <Option value="Digestive Health">Digestive Health</Option>
+        <Option value="Meal Planning">Meal Planning</Option>
+        </Select>
+          <br /><br /><br /><br /><br /><br /><br /><br />
+
           <List
-               itemLayout="horizontal"
-               dataSource={nutritionists}
-               renderItem={renderItem}
-             />
-          </Card>
+            itemLayout="horizontal"
+            dataSource={filteredNutritionists}
+            renderItem={renderItem}
+          />
           </div>
-          
-         
-          
-          </div>
-          );
-          }
-          
+);
+};
+
 export default Nutritionist;
