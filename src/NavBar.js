@@ -17,7 +17,8 @@ import {DietPlan} from'./DietPlan.js';
 import { SignUp } from './SignUp';
 import ProgressReport from './ProgressReportTrack';
 import {Nutritionist} from './Nutritionist.js';
-import{ HealthyRecipe} from './HealthyRecipie'
+import{ HealthyRecipe} from './HealthyRecipie';
+import {SymptomsCheckerPage} from './SymptomsCheckerPage';
 import axios from 'axios';
 
 
@@ -94,6 +95,7 @@ const handleLogout = async () => {
           </Menu.Item>
         </Menu>
         <Routes>     
+        <Route path ="/"symptoms-checker element={<SymptomsCheckerPage/>}/>
           <Route path ="/view-healthy-recipes" element={<HealthyRecipe/>}/>
           <Route path ="/view-nutrionists" element={<Nutritionist/>}/>
           <Route path ="/workout-plan" element={<SuggestedWorkoutPlans/>}/>
